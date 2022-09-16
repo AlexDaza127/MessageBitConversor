@@ -4,7 +4,7 @@
 package compound;
 
 /**
- * @author Michael
+ * Esta clase es la principal, aqui se toma los datos para transformalos de analogo a digital, sus respectivos voltajes y codigo binario  
  *
  */
 public class MessageBitConversor {
