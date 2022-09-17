@@ -8,6 +8,17 @@ package bitconvesor;
 public class UniformQuantifierConversor {
 
 	/**
+	 * Este metodo toma los bits y la data del mensaje y la convierte en el mensaje con los valores en binario
+	 * @param cantBit
+	 * @param data
+	 * @return
+	 */
+	public String messageBinario(int cantBit, String data) {
+
+		return null;
+	}
+	
+	/**
 	 * Este metodo toma los bits y la data del mensaje y la convierte en el mensaje con los valores en voltajes
 	 * @param cantBit
 	 * @param data
