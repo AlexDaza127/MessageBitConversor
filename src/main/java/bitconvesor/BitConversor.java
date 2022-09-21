@@ -57,17 +57,17 @@ public class BitConversor {
 	
 	public List<String> tablaSegmentos(double valorMiliVoltios, int cantSegmentos) {
 
-		double tamañoSegmento = valorMiliVoltios * 16;
-		System.out.println("Tamaño del Segmento = " + tamañoSegmento);
-		dataCodificacion.append("\r\nTamano del Segmento = " + tamañoSegmento + "\r\n");
+		double cantidadSegmento = valorMiliVoltios * 16;
+		System.out.println("Tamaño del Segmento = " + cantidadSegmento);
+		dataCodificacion.append("\r\nTamano del Segmento = " + cantidadSegmento + "\r\n");
 		List<String> tablaValoresSegmentos = new ArrayList<>();
 		List<String> valoresSegmentos = new ArrayList<>();
 
 		for (int i = 0; i < cantSegmentos; i++) {
-			double valor = tamañoSegmento * i;
+			double valor = cantidadSegmento * i;
 			tablaValoresSegmentos.add(String.valueOf(formato1.format(valor)));
 			if (i == cantSegmentos - 1) {
-				valor = tamañoSegmento * cantSegmentos;
+				valor = cantidadSegmento * cantSegmentos;
 				tablaValoresSegmentos.add(String.valueOf(formato1.format(valor)));
 			}
 		}
