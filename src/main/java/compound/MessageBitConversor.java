@@ -3,6 +3,11 @@
  */
 package compound;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -25,10 +30,14 @@ public class MessageBitConversor {
 		UniformQuantifierConversor uniformQuantifierConversor = new UniformQuantifierConversor();
 		List<List<String>> dataCalculoBits = new ArrayList<>();
 		utils.createDirs();
-		do {
-			System.out.println("Introduzca una mensaje:");
-			Scanner scContent = new Scanner(System.in);
-			String strContent = scContent.nextLine();
+		Path path = Paths.get("./MensajeEntrada/input.txt");
+		
+		try {
+			System.out.println("Insertar archivo en la carpeta MensajeEntrada:");
+			String strContent;
+			strContent = Files.readString(path, Charset.forName("UTF-8"));
+			
+			
 
 			System.out.println("Elija la cantidad de bits a codificar:");
 			Scanner scBit = new Scanner(System.in);
@@ -48,7 +57,6 @@ public class MessageBitConversor {
 				messageBinaryContent = uniformQuantifierConversor.messageBinario(9, strContent);
 				uniformQuantifierConversor.messageVoltage(9, messageBinaryContent, dataCalculoBits.get(1),
 						dataCalculoBits.get(2));
-
 				break;
 			case "10":
 				System.out.println("10 bits");
@@ -62,7 +70,9 @@ public class MessageBitConversor {
 				break;
 			}
 			System.out.println("-------------------------------------------------");
-		} while (true);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

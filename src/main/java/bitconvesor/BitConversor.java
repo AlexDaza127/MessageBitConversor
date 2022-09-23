@@ -75,7 +75,7 @@ public class BitConversor {
 		System.out.println("\r\nTabla de Segmentos");
 		dataCodificacion.append("\r\nTabla de Segmentos\r\n");
 		for (int i = 0; i < tablaValoresSegmentos.size() - 1; i++) {
-			valoresSegmentos.add(i + "-" + tablaValoresSegmentos.get(i) + "-" + tablaValoresSegmentos.get(i + 1));
+			valoresSegmentos.add(i + "|" + tablaValoresSegmentos.get(i) + "|" + tablaValoresSegmentos.get(i + 1));
 			System.out.println("|" + tablaValoresSegmentos.get(i) + " - " + tablaValoresSegmentos.get(i + 1) + "|");
 			dataCodificacion.append(
 					"|" + i + "|" + tablaValoresSegmentos.get(i) + " - " + tablaValoresSegmentos.get(i + 1) + "|\r\n");
@@ -96,7 +96,7 @@ public class BitConversor {
 		System.out.println("\r\nTabla de Intervalos");
 		dataCodificacion.append("\r\nTabla de Intervalos\r\n");
 		for (int i = 0; i < tablaValoresIntervalos.size() - 1; i++) {
-			valoresIntervalos.add(i + "-" + tablaValoresIntervalos.get(i) + "-" + tablaValoresIntervalos.get(i + 1));
+			valoresIntervalos.add(i + "|" + tablaValoresIntervalos.get(i) + "|" + tablaValoresIntervalos.get(i + 1));
 			System.out.println("|" + tablaValoresIntervalos.get(i) + " - " + tablaValoresIntervalos.get(i + 1) + "|");
 			dataCodificacion.append("|" + i + "|" + tablaValoresIntervalos.get(i) + " - "
 					+ tablaValoresIntervalos.get(i + 1) + "|\r\n");
