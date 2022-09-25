@@ -13,19 +13,22 @@ import utilities.UtilsMessage;
  *
  */
 public class BitConversor {
-
+	String dateNameTxt = "";
 	private DecimalFormat formato1 = new DecimalFormat("####.####");
 	private StringBuilder dataCodificacion = new StringBuilder();
-	
-	
-	public List<List<String>> dataContentCalculateBits(int cantBit, double cantSegmentos){
+	private int cantBitTxtName = 0;
+
+	public List<List<String>> dataContentCalculateBits(int cantBit, double cantSegmentos, String formattedDate) {
+		dateNameTxt = formattedDate;
 		List<List<String>> dataCalculoBits = new ArrayList<>();
 		dataCalculoBits.addAll(calculoBit(cantBit, cantSegmentos));
 		return dataCalculoBits;
 	}
-	
+
 	/**
-	 * Metodo para el calculo de milivoltios que se usara para hallar la tabla de segmentos e intervalos
+	 * Metodo para el calculo de milivoltios que se usara para hallar la tabla de
+	 * segmentos e intervalos
+	 * 
 	 * @param cantBit
 	 * @param cantSegmentos
 	 * @param data
@@ -33,28 +36,37 @@ public class BitConversor {
 	 */
 	public List<List<String>> calculoBit(int cantBit, double cantSegmentos) {
 		List<List<String>> dataCalculoBits = new ArrayList<>();
-		
-		List<String> voltaje =  new ArrayList<>();
+
+		List<String> voltaje = new ArrayList<>();
 		double valorMiliVoltios = (1000 / (16 * cantSegmentos));
 		System.out.println("Voltaje = " + formato1.format(valorMiliVoltios).replace(",", ".") + " mV");
 		dataCodificacion.append(+cantBit + " bits\r\n\r\n");
 		dataCodificacion.append("Voltaje = " + formato1.format(valorMiliVoltios).replace(",", ".") + " mV\r\n\r\n");
 		voltaje.add(formato1.format(valorMiliVoltios));
-		dataCalculoBits.add(0,voltaje);
+		dataCalculoBits.add(0, voltaje);
 		if (cantBit == 8) {
-			dataCalculoBits.add(1,tablaSegmentos(valorMiliVoltios, 8));
+			dataCalculoBits.add(1, tablaSegmentos(valorMiliVoltios, 8));
+			cantBitTxtName = cantBit;
 		} else if (cantBit == 9) {
-			dataCalculoBits.add(1,tablaSegmentos(valorMiliVoltios, 16));
+			dataCalculoBits.add(1, tablaSegmentos(valorMiliVoltios, 16));
+			cantBitTxtName = cantBit;
 		} else if (cantBit == 10) {
-			dataCalculoBits.add(1,tablaSegmentos(valorMiliVoltios, 32));
-		}		
-		dataCalculoBits.add(2,tablaIntervalos(valorMiliVoltios));
-		
+			dataCalculoBits.add(1, tablaSegmentos(valorMiliVoltios, 32));
+			cantBitTxtName = cantBit;
+		}
+		dataCalculoBits.add(2, tablaIntervalos(valorMiliVoltios));
+
 		createDataCodTxt();
 		return dataCalculoBits;
 	}
 
-	
+	/**
+	 * Metodo para crear la tabla de segmentos
+	 * 
+	 * @param valorMiliVoltios
+	 * @param cantSegmentos
+	 * @return
+	 */
 	public List<String> tablaSegmentos(double valorMiliVoltios, int cantSegmentos) {
 
 		double cantidadSegmento = valorMiliVoltios * 16;
@@ -81,10 +93,16 @@ public class BitConversor {
 					"|" + i + "|" + tablaValoresSegmentos.get(i) + " - " + tablaValoresSegmentos.get(i + 1) + "|\r\n");
 		}
 		dataCodificacion.append("\r\n\r\n");
-		
+
 		return valoresSegmentos;
 	}
 
+	/**
+	 * Metodo para crear la tabla de intervalos
+	 * 
+	 * @param valorMiliVoltios
+	 * @return
+	 */
 	public List<String> tablaIntervalos(double valorMiliVoltios) {
 
 		List<String> tablaValoresIntervalos = new ArrayList<>();
@@ -107,7 +125,7 @@ public class BitConversor {
 
 	public void createDataCodTxt() {
 		UtilsMessage utils = new UtilsMessage();
-		utils.createFiles(dataCodificacion.toString(), "MessageDataDod");
+		utils.createFiles(dataCodificacion.toString(), "MessageDataDod", cantBitTxtName + "Bit" + dateNameTxt);
 		dataCodificacion.delete(0, dataCodificacion.length());
 	}
 

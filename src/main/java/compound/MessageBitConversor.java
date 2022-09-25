@@ -8,6 +8,8 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -18,7 +20,7 @@ import utilities.UtilsMessage;
 
 /**
  * Esta clase es la principal, aqui se toma los datos para transformalos de
- * analogo a digital, sus respectivos voltajes y codigo binario
+ * analogo a digital
  *
  */
 public class MessageBitConversor {
@@ -28,6 +30,9 @@ public class MessageBitConversor {
 		BitConversor bitConversor = new BitConversor();
 		UtilsMessage utils = new UtilsMessage();
 		UniformQuantifierConversor uniformQuantifierConversor = new UniformQuantifierConversor();
+		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+		LocalDateTime date_of_today = LocalDateTime.now();
+		String formattedDate = date_of_today.format(format);
 		List<List<String>> dataCalculoBits = new ArrayList<>();
 		utils.createDirs();
 		Path path = Paths.get("./MensajeEntrada/input.txt");
@@ -36,8 +41,6 @@ public class MessageBitConversor {
 			System.out.println("Insertar archivo en la carpeta MensajeEntrada:");
 			String strContent;
 			strContent = Files.readString(path, Charset.forName("UTF-8"));
-			
-			
 
 			System.out.println("Elija la cantidad de bits a codificar:");
 			Scanner scBit = new Scanner(System.in);
@@ -46,24 +49,24 @@ public class MessageBitConversor {
 			switch (strBit) {
 			case "8":
 				System.out.println("8 bits");
-				dataCalculoBits.addAll(bitConversor.dataContentCalculateBits(8, 8));
-				messageBinaryContent = uniformQuantifierConversor.messageBinario(8, strContent);
+				dataCalculoBits.addAll(bitConversor.dataContentCalculateBits(8, 8, formattedDate));
+				messageBinaryContent = uniformQuantifierConversor.messageBinario(8, strContent,formattedDate);
 				uniformQuantifierConversor.messageVoltage(8, messageBinaryContent, dataCalculoBits.get(1),
-						dataCalculoBits.get(2));
+						dataCalculoBits.get(2),formattedDate );
 				break;
 			case "9":
 				System.out.println("9 bits");
-				dataCalculoBits.addAll(bitConversor.dataContentCalculateBits(9, 16));
-				messageBinaryContent = uniformQuantifierConversor.messageBinario(9, strContent);
+				dataCalculoBits.addAll(bitConversor.dataContentCalculateBits(9, 16, formattedDate));
+				messageBinaryContent = uniformQuantifierConversor.messageBinario(9, strContent,formattedDate);
 				uniformQuantifierConversor.messageVoltage(9, messageBinaryContent, dataCalculoBits.get(1),
-						dataCalculoBits.get(2));
+						dataCalculoBits.get(2),formattedDate);
 				break;
 			case "10":
 				System.out.println("10 bits");
-				dataCalculoBits.addAll(bitConversor.dataContentCalculateBits(10, 32));
-				messageBinaryContent = uniformQuantifierConversor.messageBinario(10, strContent);
+				dataCalculoBits.addAll(bitConversor.dataContentCalculateBits(10, 32, formattedDate));
+				messageBinaryContent = uniformQuantifierConversor.messageBinario(10, strContent,formattedDate);
 				uniformQuantifierConversor.messageVoltage(10, messageBinaryContent, dataCalculoBits.get(1),
-						dataCalculoBits.get(2));
+						dataCalculoBits.get(2),formattedDate);
 				break;
 			default:
 				System.out.println("No es valido");
