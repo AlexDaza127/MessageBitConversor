@@ -18,10 +18,10 @@ public class BitConversor {
 	private StringBuilder dataCodificacion = new StringBuilder();
 	private int cantBitTxtName = 0;
 
-	public List<List<String>> dataContentCalculateBits(int cantBit, double cantSegmentos, String formattedDate) {
+	public List<List<String>> dataContentCalculateBits(int cantBit, double cantSegmentos, String formattedDate, boolean fileCreate) {
 		dateNameTxt = formattedDate;
 		List<List<String>> dataCalculoBits = new ArrayList<>();
-		dataCalculoBits.addAll(calculoBit(cantBit, cantSegmentos));
+		dataCalculoBits.addAll(calculoBit(cantBit, cantSegmentos, fileCreate));
 		return dataCalculoBits;
 	}
 
@@ -34,12 +34,11 @@ public class BitConversor {
 	 * @param data
 	 * @return
 	 */
-	public List<List<String>> calculoBit(int cantBit, double cantSegmentos) {
+	public List<List<String>> calculoBit(int cantBit, double cantSegmentos, boolean fileCreate) {
 		List<List<String>> dataCalculoBits = new ArrayList<>();
 
 		List<String> voltaje = new ArrayList<>();
 		double valorMiliVoltios = (1000 / (16 * cantSegmentos));
-		System.out.println("Voltaje = " + formato1.format(valorMiliVoltios).replace(",", ".") + " mV");
 		dataCodificacion.append(+cantBit + " bits\r\n\r\n");
 		dataCodificacion.append("Voltaje = " + formato1.format(valorMiliVoltios).replace(",", ".") + " mV\r\n\r\n");
 		voltaje.add(formato1.format(valorMiliVoltios));
@@ -56,7 +55,9 @@ public class BitConversor {
 		}
 		dataCalculoBits.add(2, tablaIntervalos(valorMiliVoltios));
 
-		createDataCodTxt();
+		if (fileCreate) {
+			createDataCodTxt();
+		}
 		return dataCalculoBits;
 	}
 
@@ -70,7 +71,7 @@ public class BitConversor {
 	public List<String> tablaSegmentos(double valorMiliVoltios, int cantSegmentos) {
 
 		double cantidadSegmento = valorMiliVoltios * 16;
-		System.out.println("Tamaño del Segmento = " + cantidadSegmento);
+		// System.out.println("Tamaño del Segmento = " + cantidadSegmento);
 		dataCodificacion.append("\r\nTamano del Segmento = " + cantidadSegmento + "\r\n");
 		List<String> tablaValoresSegmentos = new ArrayList<>();
 		List<String> valoresSegmentos = new ArrayList<>();
@@ -84,11 +85,12 @@ public class BitConversor {
 			}
 		}
 
-		System.out.println("\r\nTabla de Segmentos");
+		// System.out.println("\r\nTabla de Segmentos");
 		dataCodificacion.append("\r\nTabla de Segmentos\r\n");
 		for (int i = 0; i < tablaValoresSegmentos.size() - 1; i++) {
 			valoresSegmentos.add(i + "|" + tablaValoresSegmentos.get(i) + "|" + tablaValoresSegmentos.get(i + 1));
-			System.out.println("|" + tablaValoresSegmentos.get(i) + " - " + tablaValoresSegmentos.get(i + 1) + "|");
+			// System.out.println("|" + tablaValoresSegmentos.get(i) + " - " +
+			// tablaValoresSegmentos.get(i + 1) + "|");
 			dataCodificacion.append(
 					"|" + i + "|" + tablaValoresSegmentos.get(i) + " - " + tablaValoresSegmentos.get(i + 1) + "|\r\n");
 		}
@@ -111,11 +113,12 @@ public class BitConversor {
 			double valor = valorMiliVoltios * i;
 			tablaValoresIntervalos.add(String.valueOf(formato1.format(valor)));
 		}
-		System.out.println("\r\nTabla de Intervalos");
+		// System.out.println("\r\nTabla de Intervalos");
 		dataCodificacion.append("\r\nTabla de Intervalos\r\n");
 		for (int i = 0; i < tablaValoresIntervalos.size() - 1; i++) {
 			valoresIntervalos.add(i + "|" + tablaValoresIntervalos.get(i) + "|" + tablaValoresIntervalos.get(i + 1));
-			System.out.println("|" + tablaValoresIntervalos.get(i) + " - " + tablaValoresIntervalos.get(i + 1) + "|");
+			// System.out.println("|" + tablaValoresIntervalos.get(i) + " - " +
+			// tablaValoresIntervalos.get(i + 1) + "|");
 			dataCodificacion.append("|" + i + "|" + tablaValoresIntervalos.get(i) + " - "
 					+ tablaValoresIntervalos.get(i + 1) + "|\r\n");
 		}
@@ -125,7 +128,7 @@ public class BitConversor {
 
 	public void createDataCodTxt() {
 		UtilsMessage utils = new UtilsMessage();
-		utils.createFiles(dataCodificacion.toString(), "MessageDataDod", cantBitTxtName + "Bit" + dateNameTxt);
+		utils.createFiles(dataCodificacion.toString(), "MessageDataDod", cantBitTxtName + "Bit" + dateNameTxt,"");
 		dataCodificacion.delete(0, dataCodificacion.length());
 	}
 

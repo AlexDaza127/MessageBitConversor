@@ -2,6 +2,7 @@ package utilities;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,14 +11,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
 /**
  * Clase que contiene los metodos para distintas utilidades
  *
  */
 public class UtilsMessage {
-	
+
 	/**
-	 * Metodo que crear al respectivas carpetas de los mensajes de entrada, de los mensajes codificados en binarios, voltajes; sus respectivas configuraciones
+	 * Metodo que crear al respectivas carpetas de los mensajes de entrada, de los
+	 * mensajes codificados en binarios, voltajes; sus respectivas configuraciones
 	 * dependiendo de los bits y la decodificacion del mensaje
 	 */
 	public void createDirs() {
@@ -41,33 +44,61 @@ public class UtilsMessage {
 
 	/**
 	 * Crea los archivos de los respectivos mensajes en sus respectivas carpetas
-	 * @param content contenido del mensaje
+	 * 
+	 * @param content     contenido del mensaje
 	 * @param typeMessage tipo de mensaje a craer en la carpeta especifica
 	 */
-	public void createFiles(String content, String typeMessage, String dataID) {
+	public void createFiles(String content, String typeMessage, String dataID, String message) {
 		try {
 			String fileNameBin = "./MensajesBinarios/MensajeBinario" + dataID + ".txt";
 			String fileNameVolt = "./MensajesVoltajes/MensajeVoltaje" + dataID + ".txt";
 			String fileNameDecod = "./MensajesDecodificado/MensajeDecodificado" + dataID + ".txt";
-			String fileNameDataCod = "./MensajesDataCodificacion/MensajeDataCodificacion" + dataID + "Bit.txt";
+			String fileNameDataCod = "./MensajesDataCodificacion/MensajeDataCodificacion" + dataID + ".txt";
 			List<String> lines = Arrays.asList(content);
 			Path file = null;
-			if(typeMessage.equals("MessageBinary")) {
+			if (typeMessage.equals("MessageBinary")) {
 				file = Paths.get(fileNameBin);
 				System.out.println("Se creo: MensajeBinario" + dataID + ".txt");
-			}else if(typeMessage.equals("MessageVoltaje")) {
+			} else if (typeMessage.equals("MessageVoltaje")) {
 				file = Paths.get(fileNameVolt);
 				System.out.println("Se creo: MensajeVoltaje" + dataID + ".txt");
-			}else if(typeMessage.equals("MessageDecod")) {
+			} else if (typeMessage.equals("MessageDecod")) {
 				file = Paths.get(fileNameDecod);
 				System.out.println("Se creo: MensajeDecodificado" + dataID + ".txt");
-			}else if(typeMessage.equals("MessageDataDod")) {
+			} else if (typeMessage.equals("MessageDataDod")) {
 				file = Paths.get(fileNameDataCod);
 				System.out.println("Se creo: MensajeDataCodificacion" + dataID + ".txt");
-			}			
-			Files.write(file, lines, Charset.forName("Windows-1252"));
+			}
+			try {
+				Files.write(file, lines, Charset.forName("Windows-1252"));
+				System.out.println(message);
+			} catch (CharacterCodingException ex) {
+				System.out.println("Decodificación con 0% de coincidencia\r\n");
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public List<String> contentFileVoltToDecode() {
+		List<String> contentVolt = new ArrayList<>();
+		File folder = new File("MensajesVoltajes");
+		
+		try {
+			if (folder.listFiles().length != 0) {
+				for (File file : folder.listFiles()) {
+					if (!file.isDirectory()) {
+						System.out.println("Se esta procesando el archivo: " + file.getName() + "\r\n");
+						Path path = Paths.get(folder.getAbsolutePath() + "\\" + file.getName());
+						contentVolt.add((Files.readString(path, Charset.forName("UTF-8"))).trim());
+
+					}
+				}
+				return contentVolt;
+			}
+		} catch (Exception e) {
+			System.out.println("No hay archivos para procesar en la carpeta MensajeVoltaje");
+		}
+		return contentVolt;
 	}
 }
