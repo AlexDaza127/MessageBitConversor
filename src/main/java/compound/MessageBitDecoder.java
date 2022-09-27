@@ -21,13 +21,14 @@ import utilities.UtilsMessage;
 public class MessageBitDecoder {
 
 	/**
+	 * Metodo principal de la clase decodificadora
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		UniformQuantifierConversor uniformQuantifierConversor = new UniformQuantifierConversor();
 		BitConversor bitConversor = new BitConversor();
 		UtilsMessage utils = new UtilsMessage();
-		UniformQuantifierConversor uniformQuantifierConversor = new UniformQuantifierConversor();
+		
 		List<List<String>> dataCalculoBits = new ArrayList<>();
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 		LocalDateTime date_of_today = LocalDateTime.now();

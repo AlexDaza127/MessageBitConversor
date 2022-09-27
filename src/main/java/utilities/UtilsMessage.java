@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Clase que contiene los metodos para distintas utilidades
+ * Clase que contiene los metodos de distintas utilidades
  * 
  * @author Michael
  *
@@ -20,7 +20,7 @@ import java.util.List;
 public class UtilsMessage {
 
 	/**
-	 * Metodo que crear al respectivas carpetas de los mensajes de entrada, de los
+	 * Metodo que permite crear automaticamente las respectivas carpetas de los mensajes de entrada, de los
 	 * mensajes codificados en binarios, voltajes; sus respectivas configuraciones
 	 * dependiendo de los bits y la decodificacion del mensaje
 	 */
@@ -44,7 +44,7 @@ public class UtilsMessage {
 	}
 
 	/**
-	 * Crea los archivos de los respectivos mensajes en sus respectivas carpetas
+	 * Metodo para crear los archivos de los respectivos mensajes encriptados y desencriptados en sus respectivas carpetas
 	 * 
 	 * @param content     contenido del mensaje
 	 * @param typeMessage tipo de mensaje a craer en la carpeta especifica
@@ -80,6 +80,10 @@ public class UtilsMessage {
 		}
 	}
 
+	/**
+	 * Metodo que permite leer los archivos alojados en la carpeta de archivos encriptados (carpeta MensajesVoltajes)
+	 * @return contenido del mensaje encriptado
+	 */
 	public String contentFileVoltToDecode() {
 		String contentVolt = "";
 		File folder = new File("MensajesVoltajes");
@@ -101,8 +105,12 @@ public class UtilsMessage {
 		return contentVolt;
 	}
 	
+	/**
+	 * Metodo que permite leer los archivos alojados en la carpeta de archivos para encriptar (carpeta MensajeEntrada)
+	 * @return contenido del mensaje a encriptar
+	 */
 	public String contentFileMessageToEncode() {
-		String contentVolt = "";
+		String content = "";
 		File folder = new File("MensajeEntrada");
 
 		try {
@@ -111,14 +119,14 @@ public class UtilsMessage {
 					if (!file.isDirectory()) {
 						System.out.println("Se esta procesando el archivo: " + file.getName() + "\r\n");
 						Path path = Paths.get(folder.getAbsolutePath() + "\\" + file.getName());
-						contentVolt = (Files.readString(path, Charset.forName("UTF-8"))).trim();
+						content = (Files.readString(path, Charset.forName("UTF-8"))).trim();
 					}
 				}
-				return contentVolt;
+				return content;
 			}
 		} catch (Exception e) {
 			System.out.println("No hay archivos para procesar en la carpeta MensajeEntrada");
 		}
-		return contentVolt;
+		return content;
 	}
 }

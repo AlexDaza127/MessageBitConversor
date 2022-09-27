@@ -16,11 +16,11 @@ import utilities.UtilsMessage;
  */
 public class UniformQuantifierConversor {
 
-	private DecimalFormat formatoBits = null;;
-	String dateNameTxt = "";
+	private DecimalFormat formatoBits = null;
+	private String dateNameTxt = "";
 
 	/**
-	 * Metodo prinicipal del proces de codificacion de mensajes
+	 * Metodo prinicipal del proceso de codificacion de mensajes
 	 * 
 	 * @param cantBit       cantidad de bit a codificar
 	 * @param content       contendio del mensaje a codificar
@@ -29,6 +29,7 @@ public class UniformQuantifierConversor {
 	 * @param intervalos    contendio de la tabla de intervalos de los bits a
 	 *                      codificar
 	 * @param formattedDate fecha actual para el nombre de archivo
+	 * @param strDescBit    indica si se va a decodificar el mensaje
 	 */
 	public void messageEncoder(int cantBit, String content, List<String> segmentos, List<String> intervalos,
 			String formattedDate, String strDescBit) {
@@ -43,28 +44,32 @@ public class UniformQuantifierConversor {
 	 * 
 	 * @param cantBit cantidad de bits configurados (8, 9 o 10)
 	 * @param content contenido del mensaje a convertir en binario
-	 * @return mensaje en binario creado en un archivo .txt
+	 * @return mensaje en binario creado
 	 */
 	public String messageBinario(int cantBit, String content) {
 
 		char[] charArray = content.toCharArray();
 		StringBuilder messageBin = new StringBuilder();
 		String cantCaracterBits = "";
+
 		for (int i = 0; i < cantBit; i++) {
 			cantCaracterBits += "0";
 		}
 		formatoBits = new DecimalFormat(cantCaracterBits);
 
-		for (int i = 0; i < charArray.length; i++) {
-			String s = String.format("%" + (cantBit - 1) + "s", Integer.toBinaryString((int) charArray[i])).trim();
-			if (s.length() < 12) {
-				messageBin.append(formatoBits.format(Integer.valueOf(s)) + "|");
-			}else {
-				System.out.println(s);
+		try {
+			int charL = charArray.length;
+			for (int i = 0; i < charL; i++) {
+				String s = String.format("%" + (cantBit - 1) + "s", Integer.toBinaryString((int) charArray[i])).trim();
+				if (s.length() < 12) {
+					messageBin.append(formatoBits.format(Integer.valueOf(s)) + "|");
+				}
 			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
 		}
 
-		createFileTxt(messageBin.toString(), "MessageBinary", "");
+		createFileTxt(messageBin.toString(), "MessageBinary");
 		return messageBin.toString();
 	}
 
@@ -72,14 +77,14 @@ public class UniformQuantifierConversor {
 	 * Metodo que permite elegir en que tipo de bits se creara el mensaje codificado
 	 * en voltajes
 	 * 
-	 * @param cantBit       cantidad de bits configurados (8, 9 o 10)
-	 * @param content       contenido del mensaje en binario
-	 * @param segmentos     contenido de la tabla de segementos de los bits
-	 *                      configurados
-	 * @param intervalos    contenido de la tabla de intervalos de los bits
-	 *                      configurados
-	 * @param formattedDate fecha actual para el nombre del archivo
-	 * @return mensaje codificado en voltajes en un archivo .txt
+	 * @param cantBit    cantidad de bits configurados (8, 9 o 10)
+	 * @param content    contenido del mensaje en binario
+	 * @param segmentos  contenido de la tabla de segementos de los bits
+	 *                   configurados
+	 * @param intervalos contenido de la tabla de intervalos de los bits
+	 *                   configurados
+	 * @param strDescBit indica si se va a decodificar el mensaje *
+	 * @return mensaje codificado en voltajes
 	 */
 	public void messageVoltage(int cantBit, String content, List<String> segmentos, List<String> intervalos,
 			String strDescBit) {
@@ -93,7 +98,8 @@ public class UniformQuantifierConversor {
 	}
 
 	/**
-	 * Metodo que crear el mensaje en voltios dependiendo de los bits configurados
+	 * Metodo que permite calcular el mensaje en voltios dependiendo de los bits
+	 * configurados
 	 * 
 	 * @param cantBit    cantidad de bits (8, 9 o 10)
 	 * @param content    contenido del mensaje (mensaje en binario)
@@ -102,17 +108,16 @@ public class UniformQuantifierConversor {
 	 * @param signo      signo que depende de los bits configurado
 	 * @param cantSegm   cantidad de segmentos de los bits configurados
 	 * @param cantInterv cantidad de intervalos de los bits configurados
-	 * @return mensaje codificado en voltajes
+	 * @param strDescBit indica si se va a decodificar el mensaje 
+	 * @return calculos del mensaje codificado en voltajes
 	 */
 	public void createMessageVoltage(int cantBit, String content, List<String> segmentos, List<String> intervalos,
 			int signo, int cantSegm, int cantInterv, String strDescBit) {
 		StringBuilder rangoVoltajes = new StringBuilder();
-		rangoVoltajes.delete(0, rangoVoltajes.length());
 		String[] dataBinary = content.split("\\|");
 		String signoDataDec = "";
 		String segmentosDataDec = "";
 		String intervaloDataDec = "";
-
 		double segMin = 0;
 		double interMin = 0;
 		double valorVoltaje = 0;
@@ -140,19 +145,29 @@ public class UniformQuantifierConversor {
 			rangoVoltajes.append(signoDataDec + String.valueOf(valorVoltaje) + " ");
 		}
 
-		createFileTxt(rangoVoltajes.toString(), "MessageVoltaje", "");
+		createFileTxt(rangoVoltajes.toString(), "MessageVoltaje");
 		if (strDescBit.equals("Y")) {
 			messageDecoded(rangoVoltajes.toString(), cantBit, segmentos, intervalos, signo, cantSegm, cantInterv,
 					dateNameTxt);
 		}
 	}
 
+	/**
+	 * Metodo decodificador del mensaje encriptado, sea preconfigurado los bits o en busqueda a ciegas
+	 * @param contentVoltage contendio del mensaje encriptado en voltajes con separacion de espacios
+	 * @param cantBit cantidad de bits a decodificar
+	 * @param segmentos datos de la tabla de segmentos
+	 * @param intervalos datos de la tabla de intervalos
+	 * @param signo indicar de signos de voltaje (0 = + | 1 = -)
+	 * @param cantSegm cantidad de segmentos por configuración de bits decodificadores
+	 * @param cantInterv cantidad de intervalos por configuración de bits decodificadores
+	 * @param formattedDate fecha actual para la generacion del archivo .txt con el contenido decodificado
+	 */
 	public void messageDecoded(String contentVoltage, int cantBit, List<String> segmentos, List<String> intervalos,
 			int signo, int cantSegm, int cantInterv, String formattedDate) {
 		dateNameTxt = formattedDate;
 		StringBuilder wordVoltValue = new StringBuilder();
 		String[] voltList = contentVoltage.split(" ");
-		String messageDecode = "ninguno";
 
 		for (String volt : voltList) {
 
@@ -182,37 +197,32 @@ public class UniformQuantifierConversor {
 				}
 			}
 
-			wordVoltValue.append(signValue);
-			wordVoltValue.append("|" + String.valueOf((int) segmValue) + "|");
-			wordVoltValue.append(String.valueOf((int) interValue) + " ");
-
+			wordVoltValue.append(
+					signValue + "|" + String.valueOf((int) segmValue) + "|" + String.valueOf((int) interValue) + " ");
 		}
 
-		messageDecode = cantBit + "bits";
 		if (cantBit == 8) {
-			decimalToBinario(wordVoltValue.toString(), 3, 4, messageDecode);
+			decimalToBinario(wordVoltValue.toString(), 3, 4);
 		} else if (cantBit == 9) {
-			decimalToBinario(wordVoltValue.toString(), 4, 4, messageDecode);
+			decimalToBinario(wordVoltValue.toString(), 4, 4);
 		} else {
-			decimalToBinario(wordVoltValue.toString(), 5, 4, messageDecode);
+			decimalToBinario(wordVoltValue.toString(), 5, 4);
 		}
 
 	}
 
 	/**
-	 * Este metodo convierte los valor de voltaje hechos en decimal a binario
-	 * decodificado
-	 * 
+	 * Método que decodifica los valor de voltaje hechos en decimal a binario
+	 * 	 * 
 	 * @param wordVoltValue contenido del mensaje de palabras en voltajes
 	 * @param cantSegmBin   cantidad de segmentos que se toman del numero en binario
 	 *                      por bit procesado
 	 * @param cantIntervBin cantidad de intervalos que se toman del numero en
 	 *                      binario por bit procesado
 	 */
-	public void decimalToBinario(String wordVoltValue, int cantSegmBin, int cantIntervBin, String blindSearch) {
-
-		String[] contValue = wordVoltValue.split(" ");
+	public void decimalToBinario(String wordVoltValue, int cantSegmBin, int cantIntervBin) {
 		StringBuilder wordBinValue = new StringBuilder();
+		String[] contValue = wordVoltValue.split(" ");
 
 		for (String contDec : contValue) {
 			String[] contDecValue = contDec.split("\\|");
@@ -223,9 +233,9 @@ public class UniformQuantifierConversor {
 					.format("%" + cantIntervBin + "s", Integer.toBinaryString(Integer.valueOf(contDecValue[2])))
 					.replace(" ", "0");
 
-			wordBinValue.append(contDecValue[0] + segmBin + interBin + "|"); // mensaje de decimal a binario
+			wordBinValue.append(contDecValue[0] + segmBin + interBin + "|");
 		}
-		binarioToMessageDecodificade(wordBinValue.toString(), blindSearch);
+		binarioToMessageDecodificade(wordBinValue.toString());
 	}
 
 	/**
@@ -233,7 +243,7 @@ public class UniformQuantifierConversor {
 	 * 
 	 * @param binContent contenido del mensaje en binario
 	 */
-	public void binarioToMessageDecodificade(String binContent, String blindSearch) {
+	public void binarioToMessageDecodificade(String binContent) {
 
 		String[] contBinValue = binContent.split("\\|");
 		StringBuilder wordDecod = new StringBuilder();
@@ -242,24 +252,23 @@ public class UniformQuantifierConversor {
 			int binValueInt = Integer.parseInt(binValue, 2);
 			wordDecod.append(String.valueOf(Character.toChars(Integer.parseInt(String.valueOf(binValueInt), 10))));
 		}
-		createFileTxt(wordDecod.toString(), "MessageDecod", blindSearch);// Se crea el mensaje decodificado
+		createFileTxt(wordDecod.toString(), "MessageDecod");// Se crea el mensaje decodificado
 	}
 
 	/**
 	 * Metodo que crea los archivos en las carpetas espeficas de cada tipo de
 	 * tratamiendo de datos
 	 * 
-	 * @param content contenido del mensaje, sea en voltaje, binario o palabras
-	 * @param type    tipo de mensaje, sea voltaje, binario o palabras
-	 * @param blindSearch identifica si la decodificacion es a ciegas o no
+	 * @param content     contenido del mensaje, sea en voltaje, binario o palabras
+	 * @param type        tipo de mensaje, sea voltaje, binario o palabras
 	 */
-	public void createFileTxt(String content, String type, String blindSearch) {
+	public void createFileTxt(String content, String type) {
 		UtilsMessage utils = new UtilsMessage();
 
-		Pattern pat = Pattern.compile("[A-Za-z0-9, ñÑiíaáeéoóuú.-?]+");
+		Pattern pat = Pattern.compile("[A-Za-z0-9, ñÑiíaáeéoóuú.-?+|]+");
 		Matcher mat = pat.matcher(content.substring(0, 20));
 
-		if (mat.matches() || blindSearch.isEmpty()) {
+		if (mat.matches()) {
 			utils.createFiles(content, type, dateNameTxt);
 		}
 	}

@@ -3,8 +3,18 @@ package translator;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Clase que almacena los alfabetos usados en 9 y 10 bits
+ * @author Michael
+ *
+ */
 public class AlphabetMilitary {
 
+	/**
+	 * Metodo que traduce el contendio a alfabeto militar
+	 * @param content contenido del mensaje original
+	 * @return contendio convertido a alfabeto militar
+	 */
 	public String latinoToMilitary(String content) {
 		
 		char[] charArray = content.toCharArray();
@@ -16,7 +26,6 @@ public class AlphabetMilitary {
 			  String ss = data.get(s.toUpperCase());
 			  messageMilitary.append(ss);
 			}else {
-				System.out.println(s.toUpperCase());
 			  messageMilitary.append(s);
 			}
 			
@@ -26,6 +35,10 @@ public class AlphabetMilitary {
 		return messageMilitary.toString();
 	}
 	
+	/**
+	 * Datos del alfabeto militar
+	 * @return alfabeto militar
+	 */
 	public Map<String,String> dataMilitary(){
 		Map<String,String> data = new HashMap<>();
 		
