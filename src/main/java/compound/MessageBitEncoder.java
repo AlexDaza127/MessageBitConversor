@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 import bitconvesor.BitConversor;
 import bitconvesor.UniformQuantifierConversor;
+import translator.AlphabetMilitary;
 import utilities.UtilsMessage;
 
 /**
@@ -27,6 +28,7 @@ public class MessageBitEncoder {
 		BitConversor bitConversor = new BitConversor();
 		UtilsMessage utils = new UtilsMessage();
 		UniformQuantifierConversor uniformQuantifierConversor = new UniformQuantifierConversor();
+		AlphabetMilitary military = new AlphabetMilitary();
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 		LocalDateTime date_of_today = LocalDateTime.now();
 		String formattedDate = date_of_today.format(format);
@@ -34,7 +36,7 @@ public class MessageBitEncoder {
 		utils.createDirs();
 		long inicio = 0;
 		String strContent = utils.contentFileMessageToEncode();
-
+System.out.println("content = " + strContent);
 		if (strContent.equals("") || strContent == null) {
 			System.out.println("No hay contenido disponible en la carpeta MensajeEntrada");
 		} else {
@@ -58,6 +60,12 @@ public class MessageBitEncoder {
 				dataCalculoBits.addAll(bitConversor.dataContentCalculateBits(9, 16, formattedDate,true));
 				
 				
+				System.out.println("¿Quiere codificar el mensaje en alfabeto militar? Y");
+				Scanner idioma9 = new Scanner(System.in);
+				String elecIdioma9 = idioma9.nextLine();
+				if(elecIdioma9.equals("Y")) {
+					strContent = military.latinoToMilitary(strContent);
+				}
 				
 				uniformQuantifierConversor.messageEncoder(9, strContent, dataCalculoBits.get(1),
 						dataCalculoBits.get(2), formattedDate,strDescBit);
@@ -66,7 +74,12 @@ public class MessageBitEncoder {
 				System.out.println("10 bits");
 				dataCalculoBits.addAll(bitConversor.dataContentCalculateBits(10, 32, formattedDate,true));
 				
-				
+				System.out.println("¿Quiere codificar el mensaje en alfabeto militar? Y");
+				Scanner idioma10 = new Scanner(System.in);
+				String elecIdioma10 = idioma10.nextLine();
+				if(elecIdioma10.equals("Y")) {
+					strContent = military.latinoToMilitary(strContent);
+				}
 				
 				uniformQuantifierConversor.messageEncoder(10, strContent, dataCalculoBits.get(1),
 						dataCalculoBits.get(2), formattedDate,strDescBit);

@@ -59,6 +59,8 @@ public class UniformQuantifierConversor {
 			String s = String.format("%" + (cantBit - 1) + "s", Integer.toBinaryString((int) charArray[i])).trim();
 			if (s.length() < 12) {
 				messageBin.append(formatoBits.format(Integer.valueOf(s)) + "|");
+			}else {
+				System.out.println(s);
 			}
 		}
 
@@ -249,19 +251,17 @@ public class UniformQuantifierConversor {
 	 * 
 	 * @param content contenido del mensaje, sea en voltaje, binario o palabras
 	 * @param type    tipo de mensaje, sea voltaje, binario o palabras
+	 * @param blindSearch identifica si la decodificacion es a ciegas o no
 	 */
 	public void createFileTxt(String content, String type, String blindSearch) {
 		UtilsMessage utils = new UtilsMessage();
 
 		Pattern pat = Pattern.compile("[A-Za-z0-9, ñÑiíaáeéoóuú.-?]+");
-		// System.out.println("content = " + content.substring(0,20));
 		Matcher mat = pat.matcher(content.substring(0, 20));
 
-		// System.out.println("mat.matches() = " + mat.matches());
 		if (mat.matches() || blindSearch.isEmpty()) {
 			utils.createFiles(content, type, dateNameTxt);
 		}
-
 	}
 
 }

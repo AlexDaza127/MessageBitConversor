@@ -73,6 +73,7 @@ public class UtilsMessage {
 			try {
 				Files.write(file, lines, Charset.forName("Windows-1252"));
 			} catch (CharacterCodingException ex) {
+				System.out.println(ex.toString());
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
