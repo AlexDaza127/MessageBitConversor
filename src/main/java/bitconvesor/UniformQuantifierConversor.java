@@ -2,6 +2,8 @@ package bitconvesor;
 
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import utilities.UtilsMessage;
 
@@ -9,6 +11,8 @@ import utilities.UtilsMessage;
  * Esta clase permite realizar las conversiones en binario, voltajes y volver a
  * decodificar el contendio del mensaje dependiendo de los bits configurados (8,
  * 9 o 10 bits).
+ * 
+ * @author Michael
  */
 public class UniformQuantifierConversor {
 
@@ -27,10 +31,10 @@ public class UniformQuantifierConversor {
 	 * @param formattedDate fecha actual para el nombre de archivo
 	 */
 	public void messageEncoder(int cantBit, String content, List<String> segmentos, List<String> intervalos,
-			String formattedDate) {
+			String formattedDate, String strDescBit) {
 		dateNameTxt = formattedDate;
 		String messageBin = messageBinario(cantBit, content);
-		messageVoltage(cantBit, messageBin, segmentos, intervalos);
+		messageVoltage(cantBit, messageBin, segmentos, intervalos, strDescBit);
 	}
 
 	/**
@@ -58,7 +62,7 @@ public class UniformQuantifierConversor {
 			}
 		}
 
-		createFileTxt(messageBin.toString(), "MessageBinary", "", false);
+		createFileTxt(messageBin.toString(), "MessageBinary", "");
 		return messageBin.toString();
 	}
 
@@ -75,16 +79,15 @@ public class UniformQuantifierConversor {
 	 * @param formattedDate fecha actual para el nombre del archivo
 	 * @return mensaje codificado en voltajes en un archivo .txt
 	 */
-	public void messageVoltage(int cantBit, String content, List<String> segmentos, List<String> intervalos) {
-		StringBuilder rangoVoltajes = new StringBuilder();
+	public void messageVoltage(int cantBit, String content, List<String> segmentos, List<String> intervalos,
+			String strDescBit) {
 		if (cantBit == 8) {
-			rangoVoltajes.append(createMessageVoltage(cantBit, content, segmentos, intervalos, 1, 4, 8));
+			createMessageVoltage(cantBit, content, segmentos, intervalos, 1, 4, 8, strDescBit);
 		} else if (cantBit == 9) {
-			rangoVoltajes.append(createMessageVoltage(cantBit, content, segmentos, intervalos, 1, 5, 9));
+			createMessageVoltage(cantBit, content, segmentos, intervalos, 1, 5, 9, strDescBit);
 		} else if (cantBit == 10) {
-			rangoVoltajes.append(createMessageVoltage(cantBit, content, segmentos, intervalos, 1, 6, 10));
+			createMessageVoltage(cantBit, content, segmentos, intervalos, 1, 6, 10, strDescBit);
 		}
-		createFileTxt(rangoVoltajes.toString(), "MessageVoltaje", "", false);
 	}
 
 	/**
@@ -99,8 +102,8 @@ public class UniformQuantifierConversor {
 	 * @param cantInterv cantidad de intervalos de los bits configurados
 	 * @return mensaje codificado en voltajes
 	 */
-	public StringBuilder createMessageVoltage(int cantBit, String content, List<String> segmentos,
-			List<String> intervalos, int signo, int cantSegm, int cantInterv) {
+	public void createMessageVoltage(int cantBit, String content, List<String> segmentos, List<String> intervalos,
+			int signo, int cantSegm, int cantInterv, String strDescBit) {
 		StringBuilder rangoVoltajes = new StringBuilder();
 		rangoVoltajes.delete(0, rangoVoltajes.length());
 		String[] dataBinary = content.split("\\|");
@@ -135,9 +138,11 @@ public class UniformQuantifierConversor {
 			rangoVoltajes.append(signoDataDec + String.valueOf(valorVoltaje) + " ");
 		}
 
-		// messageDecoded(rangoVoltajes.toString(), cantBit, segmentos,
-		// intervalos,signo, cantSegm, cantInterv, dateNameTxt);
-		return rangoVoltajes;
+		createFileTxt(rangoVoltajes.toString(), "MessageVoltaje", "");
+		if (strDescBit.equals("Y")) {
+			messageDecoded(rangoVoltajes.toString(), cantBit, segmentos, intervalos, signo, cantSegm, cantInterv,
+					dateNameTxt);
+		}
 	}
 
 	public void messageDecoded(String contentVoltage, int cantBit, List<String> segmentos, List<String> intervalos,
@@ -146,8 +151,6 @@ public class UniformQuantifierConversor {
 		StringBuilder wordVoltValue = new StringBuilder();
 		String[] voltList = contentVoltage.split(" ");
 		String messageDecode = "ninguno";
-		int segmExist = 0;
-		int interExist = 0;
 
 		for (String volt : voltList) {
 
@@ -157,15 +160,12 @@ public class UniformQuantifierConversor {
 			double interValue = 0;
 
 			for (String segmList : segmentos) {
-				segmValue = 0;
-				interValue = 0;
 				String[] segm = segmList.split("\\|");
 				double segmRangeMin = Double.valueOf(segm[1].replace(",", "."));
 				double segmRangeMax = Double.valueOf(segm[2].replace(",", "."));
 				if (segmRangeMin < voltValue && segmRangeMax > voltValue) {
 					interValue = voltValue - segmRangeMin;
 					segmValue = Double.valueOf(segm[0]);
-					segmExist = 1;
 					break;
 				}
 			}
@@ -176,7 +176,6 @@ public class UniformQuantifierConversor {
 				double interRangeMax = Double.valueOf(inter[2].replace(",", "."));
 				if (interRangeMin <= interValue && interRangeMax >= interValue) {
 					interValue = Double.valueOf(inter[0]);
-					interExist = 1;
 					break;
 				}
 			}
@@ -187,18 +186,15 @@ public class UniformQuantifierConversor {
 
 		}
 
-		if (segmExist == 1 && interExist == 1) {
-			messageDecode = cantBit + "bits";
-			if (cantBit == 8) {
-				decimalToBinario(wordVoltValue.toString(), 3, 4, messageDecode);
-			} else if (cantBit == 9) {
-				decimalToBinario(wordVoltValue.toString(), 4, 4, messageDecode);
-			} else {
-				decimalToBinario(wordVoltValue.toString(), 5, 4, messageDecode);
-			}
+		messageDecode = cantBit + "bits";
+		if (cantBit == 8) {
+			decimalToBinario(wordVoltValue.toString(), 3, 4, messageDecode);
+		} else if (cantBit == 9) {
+			decimalToBinario(wordVoltValue.toString(), 4, 4, messageDecode);
 		} else {
-			System.out.println("No se encontro tipo de codificación del mensaje");
+			decimalToBinario(wordVoltValue.toString(), 5, 4, messageDecode);
 		}
+
 	}
 
 	/**
@@ -244,7 +240,7 @@ public class UniformQuantifierConversor {
 			int binValueInt = Integer.parseInt(binValue, 2);
 			wordDecod.append(String.valueOf(Character.toChars(Integer.parseInt(String.valueOf(binValueInt), 10))));
 		}
-		createFileTxt(wordDecod.toString(), "MessageDecod", blindSearch, true);// Se crea el mensaje decodificado
+		createFileTxt(wordDecod.toString(), "MessageDecod", blindSearch);// Se crea el mensaje decodificado
 	}
 
 	/**
@@ -254,16 +250,18 @@ public class UniformQuantifierConversor {
 	 * @param content contenido del mensaje, sea en voltaje, binario o palabras
 	 * @param type    tipo de mensaje, sea voltaje, binario o palabras
 	 */
-	public void createFileTxt(String content, String type, String blindSearch, boolean message) {
+	public void createFileTxt(String content, String type, String blindSearch) {
 		UtilsMessage utils = new UtilsMessage();
 
-		String contentMessage = "";
-		if (message) {
-			System.out.println("Mensaje codificado a " + blindSearch);
-			contentMessage = "Mensaje decodificado con un porciento de coincidencia\r\n";
+		Pattern pat = Pattern.compile("[A-Za-z0-9, ñÑiíaáeéoóuú.-?]+");
+		// System.out.println("content = " + content.substring(0,20));
+		Matcher mat = pat.matcher(content.substring(0, 20));
 
+		// System.out.println("mat.matches() = " + mat.matches());
+		if (mat.matches() || blindSearch.isEmpty()) {
+			utils.createFiles(content, type, dateNameTxt);
 		}
-		utils.createFiles(content.toString(), type, dateNameTxt, contentMessage);
+
 	}
 
 }

@@ -11,9 +11,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
 /**
  * Clase que contiene los metodos para distintas utilidades
+ * 
+ * @author Michael
  *
  */
 public class UtilsMessage {
@@ -48,7 +49,7 @@ public class UtilsMessage {
 	 * @param content     contenido del mensaje
 	 * @param typeMessage tipo de mensaje a craer en la carpeta especifica
 	 */
-	public void createFiles(String content, String typeMessage, String dataID, String message) {
+	public void createFiles(String content, String typeMessage, String dataID) {
 		try {
 			String fileNameBin = "./MensajesBinarios/MensajeBinario" + dataID + ".txt";
 			String fileNameVolt = "./MensajesVoltajes/MensajeVoltaje" + dataID + ".txt";
@@ -71,33 +72,51 @@ public class UtilsMessage {
 			}
 			try {
 				Files.write(file, lines, Charset.forName("Windows-1252"));
-				System.out.println(message);
 			} catch (CharacterCodingException ex) {
-				System.out.println("Decodificación con 0% de coincidencia\r\n");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public List<String> contentFileVoltToDecode() {
-		List<String> contentVolt = new ArrayList<>();
+	public String contentFileVoltToDecode() {
+		String contentVolt = "";
 		File folder = new File("MensajesVoltajes");
-		
+
 		try {
 			if (folder.listFiles().length != 0) {
 				for (File file : folder.listFiles()) {
 					if (!file.isDirectory()) {
 						System.out.println("Se esta procesando el archivo: " + file.getName() + "\r\n");
 						Path path = Paths.get(folder.getAbsolutePath() + "\\" + file.getName());
-						contentVolt.add((Files.readString(path, Charset.forName("UTF-8"))).trim());
-
+						contentVolt = (Files.readString(path, Charset.forName("UTF-8"))).trim();
 					}
 				}
 				return contentVolt;
 			}
 		} catch (Exception e) {
 			System.out.println("No hay archivos para procesar en la carpeta MensajeVoltaje");
+		}
+		return contentVolt;
+	}
+	
+	public String contentFileMessageToEncode() {
+		String contentVolt = "";
+		File folder = new File("MensajeEntrada");
+
+		try {
+			if (folder.listFiles().length != 0) {
+				for (File file : folder.listFiles()) {
+					if (!file.isDirectory()) {
+						System.out.println("Se esta procesando el archivo: " + file.getName() + "\r\n");
+						Path path = Paths.get(folder.getAbsolutePath() + "\\" + file.getName());
+						contentVolt = (Files.readString(path, Charset.forName("UTF-8"))).trim();
+					}
+				}
+				return contentVolt;
+			}
+		} catch (Exception e) {
+			System.out.println("No hay archivos para procesar en la carpeta MensajeEntrada");
 		}
 		return contentVolt;
 	}

@@ -10,6 +10,8 @@ import utilities.UtilsMessage;
  * Esta clase permite convertir a los bit que se requieran, segun se para 8, 9 y
  * 10 bits, va a tener el metodo que permite realizar la tabla de segmentos y la
  * tabla de intervalos para cada caso
+ * 
+ * @author Michael
  *
  */
 public class BitConversor {
@@ -128,7 +130,7 @@ public class BitConversor {
 
 	public void createDataCodTxt() {
 		UtilsMessage utils = new UtilsMessage();
-		utils.createFiles(dataCodificacion.toString(), "MessageDataDod", cantBitTxtName + "Bit" + dateNameTxt,"");
+		utils.createFiles(dataCodificacion.toString(), "MessageDataDod", cantBitTxtName + "Bit" + dateNameTxt);
 		dataCodificacion.delete(0, dataCodificacion.length());
 	}
 
