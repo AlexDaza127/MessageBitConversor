@@ -148,7 +148,7 @@ public class UniformQuantifierConversor {
 		createFileTxt(rangoVoltajes.toString(), "MessageVoltaje");
 		if (strDescBit.equals("Y")) {
 			messageDecoded(rangoVoltajes.toString(), cantBit, segmentos, intervalos, signo, cantSegm, cantInterv,
-					dateNameTxt);
+					dateNameTxt, " ");
 		}
 	}
 
@@ -162,12 +162,14 @@ public class UniformQuantifierConversor {
 	 * @param cantSegm cantidad de segmentos por configuración de bits decodificadores
 	 * @param cantInterv cantidad de intervalos por configuración de bits decodificadores
 	 * @param formattedDate fecha actual para la generacion del archivo .txt con el contenido decodificado
+	 * @param separateVolt caracter de separacion del archivo encriptado
 	 */
 	public void messageDecoded(String contentVoltage, int cantBit, List<String> segmentos, List<String> intervalos,
-			int signo, int cantSegm, int cantInterv, String formattedDate) {
+			int signo, int cantSegm, int cantInterv, String formattedDate, String separateVolt) {
 		dateNameTxt = formattedDate;
 		StringBuilder wordVoltValue = new StringBuilder();
-		String[] voltList = contentVoltage.split(" ");
+		
+		String[] voltList = contentVoltage.split(separateVolt);
 
 		for (String volt : voltList) {
 

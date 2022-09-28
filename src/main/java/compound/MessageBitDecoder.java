@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import bitconvesor.BitConversor;
 import bitconvesor.UniformQuantifierConversor;
@@ -22,13 +23,15 @@ public class MessageBitDecoder {
 
 	/**
 	 * Metodo principal de la clase decodificadora
+	 * 
 	 * @param args
 	 */
+	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 		UniformQuantifierConversor uniformQuantifierConversor = new UniformQuantifierConversor();
 		BitConversor bitConversor = new BitConversor();
 		UtilsMessage utils = new UtilsMessage();
-		
+
 		List<List<String>> dataCalculoBits = new ArrayList<>();
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 		LocalDateTime date_of_today = LocalDateTime.now();
@@ -41,12 +44,17 @@ public class MessageBitDecoder {
 		String contentVoltList = utils.contentFileVoltToDecode();
 		try {
 			if (contentVoltList != null) {
+				String separate = " ";
+				/*System.out.println("Elija el tipo de separados del mensajes encriptado:");
+				Scanner dataSeparateSc = new Scanner(System.in);
+				separate = dataSeparateSc.nextLine();
+*/
 				uniformQuantifierConversor.messageDecoded(contentVoltList, 10, dataCalculoBits.get(7),
-						dataCalculoBits.get(8), 1, 6, 10, "10bits" + formattedDate);
+						dataCalculoBits.get(8), 1, 6, 10, "10bits" + formattedDate, separate);
 				uniformQuantifierConversor.messageDecoded(contentVoltList, 9, dataCalculoBits.get(4),
-						dataCalculoBits.get(5), 1, 5, 9, "9bits" + formattedDate);
+						dataCalculoBits.get(5), 1, 5, 9, "9bits" + formattedDate, separate);
 				uniformQuantifierConversor.messageDecoded(contentVoltList, 8, dataCalculoBits.get(1),
-						dataCalculoBits.get(2), 1, 4, 8, "8bits" + formattedDate);
+						dataCalculoBits.get(2), 1, 4, 8, "8bits" + formattedDate, separate);
 				long fin = System.currentTimeMillis();
 				double tiempoTotal = (double) ((fin - inicio));
 				System.out.println("Tiempo total de ejecución: " + tiempoTotal + " ms");
