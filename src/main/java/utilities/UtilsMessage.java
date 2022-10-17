@@ -31,6 +31,7 @@ public class UtilsMessage {
 		directorioList.add(new File("./MensajesBinarios"));
 		directorioList.add(new File("./MensajesVoltajes"));
 		directorioList.add(new File("./MensajesDataCodificacion"));
+		directorioList.add(new File("./MensajesEstadisticos"));
 		directorioList.add(new File("./MensajeEntrada"));
 		for (File directorio : directorioList) {
 			if (!directorio.exists()) {
@@ -55,6 +56,7 @@ public class UtilsMessage {
 			String fileNameVolt = "./MensajesVoltajes/MensajeVoltaje" + dataID + ".txt";
 			String fileNameDecod = "./MensajesDecodificado/MensajeDecodificado" + dataID + ".txt";
 			String fileNameDataCod = "./MensajesDataCodificacion/MensajeDataCodificacion" + dataID + ".txt";
+			String fileNameStatistic = "./MensajesEstadisticos/MensajeEstadistico" + dataID + ".txt";
 			List<String> lines = Arrays.asList(content);
 			Path file = null;
 			if (typeMessage.equals("MessageBinary")) {
@@ -69,7 +71,12 @@ public class UtilsMessage {
 			} else if (typeMessage.equals("MessageDataDod")) {
 				file = Paths.get(fileNameDataCod);
 				System.out.println("Se creo: MensajeDataCodificacion" + dataID + ".txt");
+			}else if (typeMessage.equals("MessageStatistical")) {
+				file = Paths.get(fileNameStatistic);
+				System.out.println("Se creo: MensajeEstadistico" + dataID + ".txt");
 			}
+			
+			
 			try {
 				Files.write(file, lines, Charset.forName("Windows-1252"));
 			} catch (CharacterCodingException ex) {

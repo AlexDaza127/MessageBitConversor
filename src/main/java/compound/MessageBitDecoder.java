@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import bitconvesor.BitConversor;
 import bitconvesor.UniformQuantifierConversor;
@@ -45,10 +44,6 @@ public class MessageBitDecoder {
 		try {
 			if (contentVoltList != null) {
 				String separate = " ";
-				/*System.out.println("Elija el tipo de separados del mensajes encriptado:");
-				Scanner dataSeparateSc = new Scanner(System.in);
-				separate = dataSeparateSc.nextLine();
-*/
 				uniformQuantifierConversor.messageDecoded(contentVoltList, 10, dataCalculoBits.get(7),
 						dataCalculoBits.get(8), 1, 6, 10, "10bits" + formattedDate, separate);
 				uniformQuantifierConversor.messageDecoded(contentVoltList, 9, dataCalculoBits.get(4),

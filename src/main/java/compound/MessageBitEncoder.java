@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 import bitconvesor.BitConversor;
 import bitconvesor.UniformQuantifierConversor;
+import statisticalstructure.StatisticalStructureMessage;
 import translator.AlphabetMilitary;
 import utilities.UtilsMessage;
 
@@ -32,6 +33,7 @@ public class MessageBitEncoder {
 		BitConversor bitConversor = new BitConversor();
 		UtilsMessage utils = new UtilsMessage();
 		UniformQuantifierConversor uniformQuantifierConversor = new UniformQuantifierConversor();
+		StatisticalStructureMessage statisticalStructureMessage = new StatisticalStructureMessage();
 		AlphabetMilitary military = new AlphabetMilitary();
 		List<List<String>> dataCalculoBits = new ArrayList<>();
 		
@@ -41,7 +43,7 @@ public class MessageBitEncoder {
 				
 		utils.createDirs();
 		String strContent = utils.contentFileMessageToEncode();
-		
+		statisticalStructureMessage.triggerStatisticalStructure(strContent);
 		long inicio = 0;
 		
 		if (strContent.equals("") || strContent == null) {
