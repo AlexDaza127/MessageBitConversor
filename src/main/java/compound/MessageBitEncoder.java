@@ -43,7 +43,7 @@ public class MessageBitEncoder {
 				
 		utils.createDirs();
 		String strContent = utils.contentFileMessageToEncode();
-		statisticalStructureMessage.triggerStatisticalStructure(strContent);
+		statisticalStructureMessage.triggerStatisticalStructure(strContent,"Encoder");
 		long inicio = 0;
 		
 		if (strContent.equals("") || strContent == null) {

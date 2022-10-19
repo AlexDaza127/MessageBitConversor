@@ -22,7 +22,7 @@ class StatisticalStructureMessageTest {
 		String contentMessage = "como voy a saber cuantas letras se han digitado en este ejemplo";
 		StatisticalStructureMessage frequencyAndProbability = new StatisticalStructureMessage();
 		Map<String, Double> actual = new HashMap<>();
-		actual.putAll(frequencyAndProbability.frecuency(contentMessage));
+		actual.putAll(frequencyAndProbability.frecuencyEncoder(contentMessage));
 		Map<String, Double> expected = new HashMap<>();
 		expected.putAll(dataSymbolFreq());
 		assertEquals(expected, actual);

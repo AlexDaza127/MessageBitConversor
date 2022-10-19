@@ -10,6 +10,7 @@ import java.util.List;
 
 import bitconvesor.BitConversor;
 import bitconvesor.UniformQuantifierConversor;
+import statisticalstructure.StatisticalStructureMessage;
 import utilities.UtilsMessage;
 
 /**
@@ -28,6 +29,7 @@ public class MessageBitDecoder {
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 		UniformQuantifierConversor uniformQuantifierConversor = new UniformQuantifierConversor();
+		StatisticalStructureMessage statisticalStructureMessage = new StatisticalStructureMessage();
 		BitConversor bitConversor = new BitConversor();
 		UtilsMessage utils = new UtilsMessage();
 
@@ -41,6 +43,7 @@ public class MessageBitDecoder {
 		dataCalculoBits.addAll(bitConversor.dataContentCalculateBits(10, 32, "", false));
 
 		String contentVoltList = utils.contentFileVoltToDecode();
+		statisticalStructureMessage.triggerStatisticalStructure(contentVoltList, "Decoder");
 		try {
 			if (contentVoltList != null) {
 				String separate = " ";

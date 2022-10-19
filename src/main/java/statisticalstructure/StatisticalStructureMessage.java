@@ -27,7 +27,7 @@ public class StatisticalStructureMessage {
 	 * Método principal de la clase, aqui se genera el archivo consolidado en la tabla de estadistica estructural
 	 * @param content contenido del mensaje
 	 */
-	public void triggerStatisticalStructure(String content) {
+	public void triggerStatisticalStructure(String content, String type) {
 		Map<String, Double> frequencySymbol = new HashMap<>();
 		Map<String, Double> probabilitySymbol = new HashMap<>();
 		Map<String, Double> frequencyBitsSymbol = new HashMap<>();
@@ -38,7 +38,12 @@ public class StatisticalStructureMessage {
 		String formattedDate = date_of_today.format(format);
 		DecimalFormat df = new DecimalFormat("##0.0000");
 		
-		frequencySymbol.putAll(frecuency(content));
+		if(type.equals("Encoder")) {
+			frequencySymbol.putAll(frecuencyEncoder(content));
+		}else if (type.equals("Decoder")) {
+			frequencySymbol.putAll(frecuencyDecoder(content));
+		}
+		
 		probabilitySymbol.putAll(probability(frequencySymbol, contTotalSymbol));
 		frequencyBitsSymbol.putAll(frequencyBits(probabilitySymbol));
 		expectedValueSymbol.putAll(expectedValue(probabilitySymbol, frequencyBitsSymbol));
@@ -98,16 +103,43 @@ public class StatisticalStructureMessage {
     }
 
 	/**
-	 * Frecuencia con la que aparece en el contendio un simbolo 
+	 * Frecuencia con la que aparece en el contendio un simbolo en un mensaje encriptado
 	 * @param contentMessage contenido del mensaje
 	 * @return frequencySymbol columna de frecuencias
 	 */
-	public Map<String, Double> frecuency(String contentMessage) {
+	public Map<String, Double> frecuencyDecoder(String contentMessage) {
+		contTotalSymbol = 0;
+		String[] contentSplit =  contentMessage.split(" ");
+		Map<String, Double> frequencySymbol = new HashMap<>();
+		for (int i = 0; i < contentSplit.length; i++) {
+			if (!contentSplit[i].equals("+250.5")) {
+				if (frequencySymbol.containsKey(contentSplit[i])) {
+					double cont = frequencySymbol.get(contentSplit[i]) + 1;
+					frequencySymbol.put(contentSplit[i], cont);
+				} else {
+					frequencySymbol.put(contentSplit[i], 1.0);
+				}
+			}
+		}
 
+		for (String f : frequencySymbol.keySet()) {
+			contTotalSymbol += frequencySymbol.get(f);
+		}
+
+		return frequencySymbol;
+	}
+	
+	/**
+	 * Frecuencia con la que aparece en el contenido un simbolo en texto 
+	 * @param contentMessage contenido del mensaje
+	 * @return frequencySymbol columna de frecuencias
+	 */
+	public Map<String, Double> frecuencyEncoder(String contentMessage) {
+		contTotalSymbol = 0;
 		Map<String, Double> frequencySymbol = new HashMap<>();
 		for (int i = 0; i < contentMessage.length(); i++) {
 			char letter = contentMessage.charAt(i);
-			String symbolString = String.valueOf(letter).toLowerCase();
+			String symbolString = String.valueOf(letter);
 
 			if (!symbolString.equals(" ")) {
 				if (frequencySymbol.containsKey(symbolString)) {
