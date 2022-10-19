@@ -73,8 +73,8 @@ public class BitConversor {
 	/**
 	 * Metodo para crear la tabla de segmentos
 	 * 
-	 * @param valorMiliVoltios 
-	 * @param cantSegmentos 
+	 * @param valorMiliVoltios valor en milivoltios 
+	 * @param cantSegmentos  cantidad de segmentos
 	 * @return tabla de segmentos 
 	 */
 	public List<String> tablaSegmentos(double valorMiliVoltios, int cantSegmentos) {
@@ -106,7 +106,7 @@ public class BitConversor {
 	/**
 	 * Metodo para crear la tabla de intervalos
 	 * 
-	 * @param valorMiliVoltios
+	 * @param valorMiliVoltios valor en milivoltios
 	 * @return tabla de intervalos
 	 */
 	public List<String> tablaIntervalos(double valorMiliVoltios) {

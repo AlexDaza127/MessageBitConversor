@@ -15,7 +15,6 @@ import utilities.UtilsMessage;
 
 /**
  * Clase decodificadora de mensajes encriptados en voltajes
- * 
  * @author Michael
  *
  */
@@ -23,8 +22,8 @@ public class MessageBitDecoder {
 
 	/**
 	 * Metodo principal de la clase decodificadora
+	 * @param args mensaje desencriptado
 	 * 
-	 * @param args
 	 */
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {

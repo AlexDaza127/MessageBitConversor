@@ -21,11 +21,11 @@ public class StatisticalStructureMessage {
 
 	private double contTotalSymbol = 0;
 	private double contTotalProbSymbol = 0;
-
 	
 	/**
 	 * Método principal de la clase, aqui se genera el archivo consolidado en la tabla de estadistica estructural
 	 * @param content contenido del mensaje
+	 * @param type tipo de estadistica, sea para el contendio del encriptado o desencriptado
 	 */
 	public void triggerStatisticalStructure(String content, String type) {
 		Map<String, Double> frequencySymbol = new HashMap<>();
@@ -38,9 +38,9 @@ public class StatisticalStructureMessage {
 		String formattedDate = date_of_today.format(format);
 		DecimalFormat df = new DecimalFormat("##0.0000");
 		
-		if(type.equals("Encoder")) {
+		if(type.equals("Encoder")) { 
 			frequencySymbol.putAll(frecuencyEncoder(content));
-		}else if (type.equals("Decoder")) {
+		}else if (type.equals("Decoder")) { 
 			frequencySymbol.putAll(frecuencyDecoder(content));
 		}
 		
@@ -112,7 +112,7 @@ public class StatisticalStructureMessage {
 		String[] contentSplit =  contentMessage.split(" ");
 		Map<String, Double> frequencySymbol = new HashMap<>();
 		for (int i = 0; i < contentSplit.length; i++) {
-			if (!contentSplit[i].equals("+250.5")) {
+			if (!contentSplit[i].equals("+250.5") && !contentSplit[i].equals("+125.5") && !contentSplit[i].equals("+63.0")) {
 				if (frequencySymbol.containsKey(contentSplit[i])) {
 					double cont = frequencySymbol.get(contentSplit[i]) + 1;
 					frequencySymbol.put(contentSplit[i], cont);

@@ -84,7 +84,6 @@ public class UniformQuantifierConversor {
 	 * @param intervalos contenido de la tabla de intervalos de los bits
 	 *                   configurados
 	 * @param strDescBit indica si se va a decodificar el mensaje *
-	 * @return mensaje codificado en voltajes
 	 */
 	public void messageVoltage(int cantBit, String content, List<String> segmentos, List<String> intervalos,
 			String strDescBit) {
@@ -109,7 +108,6 @@ public class UniformQuantifierConversor {
 	 * @param cantSegm   cantidad de segmentos de los bits configurados
 	 * @param cantInterv cantidad de intervalos de los bits configurados
 	 * @param strDescBit indica si se va a decodificar el mensaje 
-	 * @return calculos del mensaje codificado en voltajes
 	 */
 	public void createMessageVoltage(int cantBit, String content, List<String> segmentos, List<String> intervalos,
 			int signo, int cantSegm, int cantInterv, String strDescBit) {

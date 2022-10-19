@@ -26,7 +26,7 @@ public class MessageBitEncoder {
 
 	/**
 	 * Metodo principal de la clase encriptadora
-	 * @param args
+	 * @param args mensaje encriptado
 	 */
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
