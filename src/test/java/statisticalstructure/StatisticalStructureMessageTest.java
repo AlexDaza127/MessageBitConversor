@@ -16,15 +16,16 @@ import org.junit.jupiter.api.Test;
  */
 class StatisticalStructureMessageTest {
 
+		
 	@Test
-	public void testFrecuency() {
+	public void testFrecuencyEncoder() {
 
 		String contentMessage = "como voy a saber cuantas letras se han digitado en este ejemplo";
 		StatisticalStructureMessage frequencyAndProbability = new StatisticalStructureMessage();
 		Map<String, Double> actual = new HashMap<>();
 		actual.putAll(frequencyAndProbability.frecuencyEncoder(contentMessage));
 		Map<String, Double> expected = new HashMap<>();
-		expected.putAll(dataSymbolFreq());
+		expected.putAll(dataSymbolFreqEncoder());
 		assertEquals(expected, actual);
 	}
 
@@ -32,7 +33,7 @@ class StatisticalStructureMessageTest {
 	public void testProbability() {
 		StatisticalStructureMessage frequencyAndProbability = new StatisticalStructureMessage();
 		Map<String, Double> actual = new HashMap<>();
-		actual.putAll(frequencyAndProbability.probability(dataSymbolFreq(), 52));
+		actual.putAll(frequencyAndProbability.probability(dataSymbolFreqEncoder(), 52));
 		Map<String, Double> expected = new HashMap<>();
 		expected.putAll(dataSymbolProb());
 		assertEquals(expected, actual);
@@ -58,7 +59,8 @@ class StatisticalStructureMessageTest {
 		assertEquals(expected, actual);
 	}
 	
-	public Map<String, Double> dataSymbolFreq() {
+	
+	public Map<String, Double> dataSymbolFreqEncoder() {
 		Map<String, Double> data = new HashMap<>();
 		data.put("a", 7.0);
 		data.put("b", 1.0);
