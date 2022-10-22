@@ -32,6 +32,8 @@ public class UtilsMessage {
 		directorioList.add(new File("./MensajesVoltajes"));
 		directorioList.add(new File("./MensajesDataCodificacion"));
 		directorioList.add(new File("./MensajesEstadisticos"));
+		directorioList.add(new File("./MensajesTramaDecode"));
+		directorioList.add(new File("./MensajesTramaEncode"));
 		directorioList.add(new File("./MensajeEntrada"));
 		for (File directorio : directorioList) {
 			if (!directorio.exists()) {
@@ -58,6 +60,8 @@ public class UtilsMessage {
 			String fileNameDecod = "./MensajesDecodificado/MensajeDecodificado" + dataID + ".txt";
 			String fileNameDataCod = "./MensajesDataCodificacion/MensajeDataCodificacion" + dataID + ".txt";
 			String fileNameStatistic = "./MensajesEstadisticos/MensajeEstadistico" + dataID + ".txt";
+			String fileTramaDecode = "./MensajesTramaDecode/MensajesTramaDecode" + dataID + ".txt";
+			String fileTramaEncode = "./MensajesTramaEncode/MensajesTramaEncode" + dataID + ".txt";
 			List<String> lines = Arrays.asList(content);
 			Path file = null;
 			if (typeMessage.equals("MessageBinary")) {
@@ -75,6 +79,12 @@ public class UtilsMessage {
 			}else if (typeMessage.equals("MessageStatistical")) {
 				file = Paths.get(fileNameStatistic);
 				System.out.println("Se creo: MensajeEstadistico" + dataID + ".txt");
+			}else if (typeMessage.equals("MessageTramaDecode")) {
+				file = Paths.get(fileTramaDecode);
+				System.out.println("Se creo: MessageTramaDecode" + dataID + ".txt");
+			}else if (typeMessage.equals("MessageTramaEncode")) {
+				file = Paths.get(fileTramaEncode);
+				System.out.println("Se creo: MessageTramaEncode" + dataID + ".txt");
 			}
 			
 			
