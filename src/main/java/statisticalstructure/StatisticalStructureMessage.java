@@ -31,65 +31,68 @@ public class StatisticalStructureMessage {
 	 * @param type    tipo de estadistica, sea para el contendio del encriptado o
 	 *                desencriptado
 	 */
-	public void triggerStatisticalStructure(String content, String type) {
-		Map<String, Double> frequencySymbol = new HashMap<>();
-		Map<String, Double> probabilitySymbol = new HashMap<>();
-		Map<String, Double> frequencyBitsSymbol = new HashMap<>();
-		Map<String, Double> expectedValueSymbol = new HashMap<>();
-		StringBuilder processData = new StringBuilder();
-		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-		LocalDateTime date_of_today = LocalDateTime.now();
-		String formattedDate = date_of_today.format(format);
-		DecimalFormat df = new DecimalFormat("##0.0000");
+	public String triggerStatisticalStructure(String content, String type) {
+		if (content != null) {
+			Map<String, Double> frequencySymbol = new HashMap<>();
+			Map<String, Double> probabilitySymbol = new HashMap<>();
+			Map<String, Double> frequencyBitsSymbol = new HashMap<>();
+			Map<String, Double> expectedValueSymbol = new HashMap<>();
+			StringBuilder processData = new StringBuilder();
+			DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+			LocalDateTime date_of_today = LocalDateTime.now();
+			String formattedDate = date_of_today.format(format);
+			DecimalFormat df = new DecimalFormat("##0.0000");
 
-		if (type.equals("Encoder")) {
-			frequencySymbol.putAll(frecuencyEncoder(content));
-		} else if (type.equals("Decoder")) {
-			frequencySymbol.putAll(frecuencyDecoder(content));
+			if (type.equals("Encoder")) {
+				frequencySymbol.putAll(frecuencyEncoder(content));
+			} else if (type.equals("Decoder")) {
+				frequencySymbol.putAll(frecuencyDecoder(content));
+			}
+
+			probabilitySymbol.putAll(probability(frequencySymbol, contTotalSymbol));
+			frequencyBitsSymbol.putAll(frequencyBits(probabilitySymbol));
+			expectedValueSymbol.putAll(expectedValue(probabilitySymbol, frequencyBitsSymbol));
+
+			processData.append("Simbolo\t|Frecuencia\t|Probabilidad\t|Frecuencia Bits\t|Esperanza\r\n");
+
+			List<String> orderAlphabet = new ArrayList<>();
+			List<Double> orderProb = new ArrayList<>();
+
+			for (String f : frequencySymbol.keySet()) {
+				orderAlphabet.add(f);
+			}
+
+			for (Double f : probabilitySymbol.values()) {
+				orderProb.add(f);
+			}
+
+			Collections.sort(orderAlphabet);
+
+			for (String f : orderAlphabet) {
+				processData.append(f + "\t\t|" + frequencySymbol.get(f) + "\t\t|" + df.format(probabilitySymbol.get(f))
+						+ "\t\t\t|" + df.format(frequencyBitsSymbol.get(f)) + "\t\t\t\t|"
+						+ df.format(expectedValueSymbol.get(f)) + "\r\n");
+			}
+			processData.append(
+					"\r\n\r\n\r\ncantidad total frecuencia de simbolos contados = " + (int) contTotalSymbol + "\r\n");
+			processData.append("cantidad total probabilidad de simbolos contados = "
+					+ df.format(contTotalProbSymbol).replace(",", "."));
+
+			Collections.sort(orderProb);
+			Collections.reverse(orderProb);
+			processData.append("\r\nOrden de mayor a menor frecuencia de aparición obtenida: \r\n");
+
+			String getKeyFromValue = "";
+			for (Double f : orderProb) {
+				getKeyFromValue += getSingleKeyFromValue(probabilitySymbol, f) + "|";
+			}
+			processData.append(getKeyFromValue);
+
+			UtilsMessage utilMessage = new UtilsMessage();
+			utilMessage.createFiles(processData.toString(), "MessageStatistical", formattedDate);
+			return content;
 		}
-
-		probabilitySymbol.putAll(probability(frequencySymbol, contTotalSymbol));
-		frequencyBitsSymbol.putAll(frequencyBits(probabilitySymbol));
-		expectedValueSymbol.putAll(expectedValue(probabilitySymbol, frequencyBitsSymbol));
-
-		processData.append("Simbolo\t|Frecuencia\t|Probabilidad\t|Frecuencia Bits\t|Esperanza\r\n");
-
-		List<String> orderAlphabet = new ArrayList<>();
-		List<Double> orderProb = new ArrayList<>();
-
-		for (String f : frequencySymbol.keySet()) {
-			orderAlphabet.add(f);
-		}
-
-		for (Double f : probabilitySymbol.values()) {
-			orderProb.add(f);
-		}
-
-		Collections.sort(orderAlphabet);
-
-		for (String f : orderAlphabet) {
-			processData.append(f + "\t\t|" + frequencySymbol.get(f) + "\t\t|" + df.format(probabilitySymbol.get(f))
-					+ "\t\t\t|" + df.format(frequencyBitsSymbol.get(f)) + "\t\t\t\t|"
-					+ df.format(expectedValueSymbol.get(f)) + "\r\n");
-		}
-		processData.append(
-				"\r\n\r\n\r\ncantidad total frecuencia de simbolos contados = " + (int) contTotalSymbol + "\r\n");
-		processData.append("cantidad total probabilidad de simbolos contados = "
-				+ df.format(contTotalProbSymbol).replace(",", "."));
-
-		Collections.sort(orderProb);
-		Collections.reverse(orderProb);
-		processData.append("\r\nOrden de mayor a menor frecuencia de aparición obtenida: \r\n");
-
-		String getKeyFromValue = "";
-		for (Double f : orderProb) {
-			getKeyFromValue += getSingleKeyFromValue(probabilitySymbol, f) + "|";
-		}
-		processData.append(getKeyFromValue);
-
-		UtilsMessage utilMessage = new UtilsMessage();
-		utilMessage.createFiles(processData.toString(), "MessageStatistical", formattedDate);
-
+		return null;
 	}
 
 	/**
@@ -112,7 +115,7 @@ public class StatisticalStructureMessage {
 	}
 
 	/**
-	 * Frecuencia con la que aparece en el contendio un simbolo en un mensaje
+	 * Frecuencia con la que aparece en el contenido un simbolo en un mensaje
 	 * encriptado
 	 * 
 	 * @param contentMessage contenido del mensaje
@@ -120,7 +123,7 @@ public class StatisticalStructureMessage {
 	 */
 	public Map<String, Double> frecuencyDecoder(String contentMessage) {
 		Map<String, Double> frequencySymbol = new HashMap<>();
-		Map<String, String> orderSymbol = new HashMap<>();
+		Map<String, String> tramaSymbol = new HashMap<>();
 		LocalDateTime date_of_today = LocalDateTime.now();
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 		String formattedDate = date_of_today.format(format);
@@ -128,46 +131,60 @@ public class StatisticalStructureMessage {
 		contTotalSymbol = 0;
 
 		for (int i = 0; i < contentSplit.length; i++) {
-			
+
 			String symbolString = contentSplit[i];
-				if (frequencySymbol.containsKey(symbolString)) {
-					double cont = frequencySymbol.get(symbolString) + 1;
-					frequencySymbol.put(symbolString, cont);
-					orderSymbol.put(symbolString, orderSymbol.get(symbolString) + ";" + i);
-				} else {
-					frequencySymbol.put(symbolString, 1.0);
-					orderSymbol.put(symbolString, String.valueOf(i));
-				}
+			if (frequencySymbol.containsKey(symbolString)) {
+				double cont = frequencySymbol.get(symbolString) + 1;
+				frequencySymbol.put(symbolString, cont);
+				tramaSymbol.put(symbolString, tramaSymbol.get(symbolString) + ";" + i);
+			} else {
+				frequencySymbol.put(symbolString, 1.0);
+				tramaSymbol.put(symbolString, String.valueOf(i));
+			}
 		}
 
 		for (String f : frequencySymbol.keySet()) {
 			contTotalSymbol += frequencySymbol.get(f);
-		}		
-		
-		StringBuilder trama = new StringBuilder();
-		trama.append("Simbolo\t|Frecuencia\t|Orden de aparición\r\n");			
-		for (String k : orderSymbol.keySet()) {
-			trama.append(k + "\t|" + frequencySymbol.get(k) +"\t|" + orderSymbol.get(k)+"\r\n");
 		}
-		
+
+		StringBuilder trama = new StringBuilder();
+		trama.append("Simbolo|Frecuencia|Orden de aparición\r\n");
+		for (String k : tramaSymbol.keySet()) {
+			trama.append(k + "|" + frequencySymbol.get(k) + "|" + tramaSymbol.get(k) + "\r\n");
+		}
+
 		UtilsMessage utilMessage = new UtilsMessage();
 		utilMessage.createFiles(trama.toString(), "MessageTramaDecode", formattedDate);
-
+		createFileTrama(tramaSymbol);
 		return frequencySymbol;
 	}
-	
-	public Map<String, String> dataSpecial() {
-		Map<String, String> specialChar = new HashMap<>();
-		specialChar.put("+250.5", "space");
-		specialChar.put("+125.5", "space");
-		specialChar.put("+63.0", "space");
-		specialChar.put("+102.0625", "return");
-		specialChar.put("+39.5625", "return");
-		specialChar.put("+20.0312", "return");
-		specialChar.put("+78.625", "new line");
-		specialChar.put("+51.2812", "new line");
-		specialChar.put("+25.8906", "new line");
-		return null;
+
+	/**
+	 * Toma la trama de symbolos y crea el archivo con los datos de simbolos,
+	 * frecuencia y lugar de aparición
+	 * 
+	 * @param tramaSymbol contenido de la trama
+	 */
+	public void createFileTrama(Map<String, String> tramaSymbol) {
+		StringBuilder contentMessage = new StringBuilder();
+		Map<String, String> mapContent = new HashMap<>();
+		LocalDateTime date_of_today = LocalDateTime.now();
+		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+		String formattedDate = date_of_today.format(format);
+
+		for (String k : tramaSymbol.keySet()) {
+			String[] numChar = tramaSymbol.get(k).split(";");
+			for (String string : numChar) {
+				mapContent.put(string, k);
+			}
+		}
+
+		for (int i = 0; i < contTotalSymbol; i++) {
+			contentMessage.append(mapContent.get(String.valueOf(i)) + " ");
+		}
+
+		UtilsMessage utilMessage = new UtilsMessage();
+		utilMessage.createFiles(contentMessage.toString(), "MessageVoltaje", "Trama" + formattedDate);
 	}
 
 	/**
@@ -179,44 +196,40 @@ public class StatisticalStructureMessage {
 	public Map<String, Double> frecuencyEncoder(String contentMessage) {
 		contTotalSymbol = 0;
 		Map<String, Double> frequencySymbol = new HashMap<>();
-		Map<String, String> orderSymbol = new HashMap<>();
+		Map<String, String> tramaSymbol = new HashMap<>();
 		LocalDateTime date_of_today = LocalDateTime.now();
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 		String formattedDate = date_of_today.format(format);
 		for (int i = 0; i < contentMessage.length(); i++) {
 			char letter = contentMessage.charAt(i);
-			String symbolString = String.valueOf(letter).equals(" ") ? "space" : 
-				String.valueOf(letter).equals("\r") ? "return" : String.valueOf(letter).equals("\n") ? "new line" : String.valueOf(letter);
+			String symbolString = String.valueOf(letter).equals(" ") ? "space"
+					: String.valueOf(letter).equals("\r") ? "return"
+							: String.valueOf(letter).equals("\n") ? "new line" : String.valueOf(letter);
 
-				if (frequencySymbol.containsKey(symbolString)) {
-					double cont = frequencySymbol.get(symbolString) + 1;
-					frequencySymbol.put(symbolString, cont);
-					orderSymbol.put(symbolString, orderSymbol.get(symbolString) + ";" + i);
-				} else {
-					frequencySymbol.put(symbolString, 1.0);
-					orderSymbol.put(symbolString, String.valueOf(i));
-				}
+			if (frequencySymbol.containsKey(symbolString)) {
+				double cont = frequencySymbol.get(symbolString) + 1;
+				frequencySymbol.put(symbolString, cont);
+				tramaSymbol.put(symbolString, tramaSymbol.get(symbolString) + ";" + i);
+			} else {
+				frequencySymbol.put(symbolString, 1.0);
+				tramaSymbol.put(symbolString, String.valueOf(i));
+			}
 		}
 
 		for (String f : frequencySymbol.keySet()) {
 			contTotalSymbol += frequencySymbol.get(f);
 		}
-		
+
 		StringBuilder trama = new StringBuilder();
-		trama.append("Simbolo\t|Frecuencia\t|Orden de aparición\r\n");			
-		for (String k : orderSymbol.keySet()) {
-			trama.append(k + "\t|" + frequencySymbol.get(k) +"\t|" + orderSymbol.get(k)+"\r\n");
+		trama.append("Simbolo|Frecuencia|Orden de aparición\r\n");
+		for (String k : tramaSymbol.keySet()) {
+			trama.append(k + "|" + frequencySymbol.get(k) + "|" + tramaSymbol.get(k) + "\r\n");
 		}
-		
+
 		UtilsMessage utilMessage = new UtilsMessage();
 		utilMessage.createFiles(trama.toString(), "MessageTramaEncode", formattedDate);
-		
-
 		return frequencySymbol;
 	}
-	
-	
-	//TODO ya se hizo la trama, ahora falta es tomar esa trama y convertirla en texto dependiendo de la posicion que dice cada simbolo
 
 	/**
 	 * Porcentaje de probabilidad de aparición de los simbolos

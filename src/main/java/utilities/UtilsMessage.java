@@ -103,7 +103,7 @@ public class UtilsMessage {
 	 * @return contenido del mensaje encriptado
 	 */
 	public String contentFileVoltToDecode() {
-		String contentVolt = "";
+		String contentVolt = null;
 		File folder = new File("MensajesVoltajes");
 
 		try {

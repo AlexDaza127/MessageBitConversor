@@ -15,6 +15,7 @@ import utilities.UtilsMessage;
 
 /**
  * Clase decodificadora de mensajes encriptados en voltajes
+ * 
  * @author Michael
  *
  */
@@ -22,6 +23,7 @@ public class MessageBitDecoder {
 
 	/**
 	 * Metodo principal de la clase decodificadora
+	 * 
 	 * @param args mensaje desencriptado
 	 * 
 	 */
@@ -31,7 +33,7 @@ public class MessageBitDecoder {
 		StatisticalStructureMessage statisticalStructureMessage = new StatisticalStructureMessage();
 		BitConversor bitConversor = new BitConversor();
 		UtilsMessage utils = new UtilsMessage();
-
+		utils.createDirs();
 		List<List<String>> dataCalculoBits = new ArrayList<>();
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 		LocalDateTime date_of_today = LocalDateTime.now();
@@ -42,9 +44,9 @@ public class MessageBitDecoder {
 		dataCalculoBits.addAll(bitConversor.dataContentCalculateBits(10, 32, "", false));
 
 		String contentVoltList = utils.contentFileVoltToDecode();
-		statisticalStructureMessage.triggerStatisticalStructure(contentVoltList, "Decoder");
 		try {
 			if (contentVoltList != null) {
+				contentVoltList = statisticalStructureMessage.triggerStatisticalStructure(contentVoltList, "Decoder");
 				String separate = " ";
 				uniformQuantifierConversor.messageDecoded(contentVoltList, 10, dataCalculoBits.get(7),
 						dataCalculoBits.get(8), 1, 6, 10, "10bits" + formattedDate, separate);
@@ -57,6 +59,8 @@ public class MessageBitDecoder {
 				System.out.println("Tiempo total de ejecución: " + tiempoTotal + " ms");
 				System.out.println("Se termina el proceso de desencriptación");
 				System.out.println("-------------------------------------------------");
+			}else {
+				System.out.println("No hay archivos para procesar en la carpeta MensajesVoltajes");
 			}
 		} catch (Exception e) {
 			System.out.println(e.toString());
