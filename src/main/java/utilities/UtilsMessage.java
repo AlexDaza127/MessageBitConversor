@@ -51,7 +51,7 @@ public class UtilsMessage {
 	 * 
 	 * @param content     contenido del mensaje
 	 * @param typeMessage tipo de mensaje a craer en la carpeta especifica
-	 * @param dataID fecha de identificación del archivo generado
+	 * @param dataID fecha de identificaciÃ³n del archivo generado
 	 */
 	public void createFiles(String content, String typeMessage, String dataID) {
 		try {
@@ -112,7 +112,7 @@ public class UtilsMessage {
 					if (!file.isDirectory()) {
 						System.out.println("Se esta procesando el archivo: " + file.getName() + "\r\n");
 						Path path = Paths.get(folder.getAbsolutePath() + "\\" + file.getName());
-						contentVolt = (Files.readString(path, Charset.forName("UTF-8"))).trim();
+						contentVolt = (Files.readString(path, Charset.forName("Windows-1252"))).trim();
 					}
 				}
 				return contentVolt;
@@ -137,7 +137,7 @@ public class UtilsMessage {
 					if (!file.isDirectory()) {
 						System.out.println("Se esta procesando el archivo: " + file.getName() + "\r\n");
 						Path path = Paths.get(folder.getAbsolutePath() + "\\" + file.getName());
-						content = (Files.readString(path, Charset.forName("UTF-8"))).trim();
+						content = (Files.readString(path, Charset.forName("Windows-1252"))).trim();
 					}
 				}
 				return content;
