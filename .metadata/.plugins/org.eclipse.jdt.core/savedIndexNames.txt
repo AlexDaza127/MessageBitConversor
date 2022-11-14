@@ -1,0 +1,4 @@
+INDEX VERSION 1.131+D:\UNIVERSIDAD DISTRITAL INGENIERIA TELEMATICA\Teoria de la informacion\MessageBitConversor\.metadata\.plugins\org.eclipse.jdt.core
+2876642601.index
+2626907989.index
+1704979481.index

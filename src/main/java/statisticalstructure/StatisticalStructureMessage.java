@@ -25,7 +25,7 @@ public class StatisticalStructureMessage {
     private double contTotalEntropy = 0;
 
     /**
-     * MÃ©todo principal de la clase, aqui se genera el archivo consolidado en la
+     * Método principal de la clase, aqui se genera el archivo consolidado en la
      * tabla de estadistica estructural
      *
      * @param content contenido del mensaje

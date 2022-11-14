@@ -3,6 +3,7 @@
  */
 package compound;
 
+import binarystructure.BinaryStructure;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class MessageBitEncoder {
     @SuppressWarnings("resource")
     public static void main(String[] args) {
         BitConversor bitConversor = new BitConversor();
+        BinaryStructure binaryStructure = new BinaryStructure();
         UtilsMessage utils = new UtilsMessage();
         UniformQuantifierConversor uniformQuantifierConversor = new UniformQuantifierConversor();
         StatisticalStructureMessage statisticalStructureMessage = new StatisticalStructureMessage();
@@ -47,7 +49,7 @@ public class MessageBitEncoder {
         utils.createDirs();
         String strContent = utils.contentFileMessageToEncode();
         statisticalStructureMessage.triggerStatisticalStructure(strContent, "Encoder");
-
+        binaryStructure.principalBinaryStructure(strContent, 2);
         if (strContent.equals("") || strContent == null) {
             System.out.println("No hay contenido disponible en la carpeta MensajeEntrada");
         } else {
@@ -57,7 +59,7 @@ public class MessageBitEncoder {
             Scanner scBit = new Scanner(System.in);
             String strBit = scBit.nextLine();
 
-            System.out.println("Â¿Quiere decodificar el mensaje? Y");
+            System.out.println("¿Quiere decodificar el mensaje? Y");
             Scanner descisionDecBit = new Scanner(System.in);
             String strDescBit = descisionDecBit.nextLine();
 
@@ -72,7 +74,7 @@ public class MessageBitEncoder {
                     System.out.println("9 bits");
                     dataCalculoBits.addAll(bitConversor.dataContentCalculateBits(9, 16, formattedDate, true));
 
-                    System.out.println("Â¿Quiere codificar el mensaje en alfabeto militar? Y");
+                    System.out.println("¿Quiere codificar el mensaje en alfabeto militar? Y");
                     Scanner idioma9 = new Scanner(System.in);
                     String elecIdioma9 = idioma9.nextLine();
                     if (elecIdioma9.equals("Y")) {
@@ -87,7 +89,7 @@ public class MessageBitEncoder {
                     System.out.println("10 bits");
                     dataCalculoBits.addAll(bitConversor.dataContentCalculateBits(10, 32, formattedDate, true));
 
-                    System.out.println("Â¿Quiere codificar el mensaje en alfabeto militar? Y");
+                    System.out.println("¿Quiere codificar el mensaje en alfabeto militar? Y");
                     Scanner idioma10 = new Scanner(System.in);
                     String elecIdioma10 = idioma10.nextLine();
                     if (elecIdioma10.equals("Y")) {
@@ -105,8 +107,8 @@ public class MessageBitEncoder {
         }
         long fin = System.currentTimeMillis();
         double tiempoTotal = (double) ((fin - inicio));
-        System.out.println("Tiempo total de ejecuciÃ³n: " + tiempoTotal + " ms");
-        System.out.println("Se termina el proceso de encriptaciÃ³n");
+        System.out.println("Tiempo total de ejecucion: " + tiempoTotal + " ms");
+        System.out.println("Se termina el proceso de encriptacion");
         System.out.println("-------------------------------------------------");
     }
 
