@@ -77,7 +77,7 @@ public class BinaryStructure {
     public Map<String, Double> blockFrequency(String blocks) {
         Map<String, Double> freqBlock = new HashMap<>();
 
-        String[] blocksDivide = blocks.split("|");
+        String[] blocksDivide = blocks.split("\\|");
 
         for (String block : blocksDivide) {
             String bDiv = String.valueOf(block).equals(" ") ? "space"

@@ -48,13 +48,23 @@ public class MessageBitEncoder {
         
         utils.createDirs();
         String strContent = utils.contentFileMessageToEncode();
-        statisticalStructureMessage.triggerStatisticalStructure(strContent, "Encoder");
-        binaryStructure.principalBinaryStructure(strContent, 2);
+        
+        
+        
         if (strContent.equals("") || strContent == null) {
             System.out.println("No hay contenido disponible en la carpeta MensajeEntrada");
         } else {
+        	
             System.out.println("Se inserto el contenido exitosamente");
+            
 
+        	statisticalStructureMessage.triggerStatisticalStructure(strContent, "Encoder");
+        	System.out.println("Elija la cantidad de bloques a estructurar:");
+        	Scanner cantBloq = new Scanner(System.in);
+            String cb = cantBloq.nextLine();
+            
+            binaryStructure.principalBinaryStructure(strContent, Integer.valueOf(cb));
+            
             System.out.println("Elija la cantidad de bits a codificar:");
             Scanner scBit = new Scanner(System.in);
             String strBit = scBit.nextLine();
