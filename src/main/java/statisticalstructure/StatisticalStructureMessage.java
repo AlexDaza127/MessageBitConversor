@@ -330,7 +330,8 @@ public class StatisticalStructureMessage {
 														if (cantBlock >= 8)
 															for (int p = 0; p < orderBlock.size(); p++) {
 																if(cantBlock == 8) {
-																	multiProbBlock.append(orderBlock.get(i) +" * "+ orderBlock.get(j)+" * "+ orderBlock.get(k)+" * "+ orderBlock.get(l)+" * "+ orderBlock.get(m)+" * "+ orderBlock.get(n)+" * "+ orderBlock.get(o)+" * "+ orderBlock.get(p) + "\r\n");
+																	//multiProbBlock.append(orderBlock.get(i) +" * "+ orderBlock.get(j)+" * "+ orderBlock.get(k)+" * "+ orderBlock.get(l)+" * "+ orderBlock.get(m)+" * "+ orderBlock.get(n)+" * "+ orderBlock.get(o)+" * "+ orderBlock.get(p) + "\r\n");
+																System.out.println(orderBlock.get(i) +" * "+ orderBlock.get(j)+" * "+ orderBlock.get(k)+" * "+ orderBlock.get(l)+" * "+ orderBlock.get(m)+" * "+ orderBlock.get(n)+" * "+ orderBlock.get(o)+" * "+ orderBlock.get(p) + "\r\n");
 																}
 															}
 													}
