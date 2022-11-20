@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import bitconvesor.BitConversor;
 import bitconvesor.UniformQuantifierConversor;
@@ -46,7 +47,10 @@ public class MessageBitDecoder {
 		String contentVoltList = utils.contentFileVoltToDecode();
 		try {
 			if (contentVoltList != null) {
-				contentVoltList = statisticalStructureMessage.triggerStatisticalStructure(contentVoltList, "Decoder");
+				System.out.println("Elija la cantidad de bloques a estructurar:");
+	        	Scanner cantBloq = new Scanner(System.in);
+	        	int cb = cantBloq.nextInt();
+				contentVoltList = statisticalStructureMessage.triggerStatisticalStructure(contentVoltList, "Decoder", cb);
 				String separate = " ";
 				uniformQuantifierConversor.messageDecoded(contentVoltList, 10, dataCalculoBits.get(7),
 						dataCalculoBits.get(8), 1, 6, 10, "10bits" + formattedDate, separate);

@@ -3,7 +3,10 @@ package binarystructure;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import utilities.UtilsMessage;
 
@@ -116,10 +119,16 @@ public class BinaryStructure {
     public Map<String, Double> blockCombination(Map<String, Double> probBlock, int cantBlock) {
         StringBuilder multiProbBlock = new StringBuilder();
         Map<String, Double> combination = new HashMap<>();
-        
+        List<String> orderBlock =  new ArrayList<>();
         System.out.println("probBlock.size() = " + probBlock.size());
-        for (int i = 0; i < probBlock.size(); i++) {
-            
+        orderBlock.addAll(probBlock.keySet());
+        Collections.sort(orderBlock);
+        for (int i = 0; i < orderBlock.size(); i++) {
+        	for (int j = 0; j < orderBlock.size(); j++) {
+        		
+        		
+        	 System.out.println("orderBlock = " + orderBlock.get(i) + " * " + orderBlock.get(j));
+        	}
         }
 
         return combination;

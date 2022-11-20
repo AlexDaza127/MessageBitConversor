@@ -15,15 +15,15 @@ import org.junit.jupiter.api.Test;
  *
  */
 class StatisticalStructureMessageTest {
-
+	StatisticalStructureMessage statisticalStructure = new StatisticalStructureMessage();
 		
 	@Test
 	public void testFrecuencyEncoder() {
 
 		String contentMessage = "como voy a saber cuantas letras se han digitado en este ejemplo";
-		StatisticalStructureMessage frequencyAndProbability = new StatisticalStructureMessage();
+		
 		Map<String, Double> actual = new HashMap<>();
-		actual.putAll(frequencyAndProbability.frecuencyEncoder(contentMessage));
+		actual.putAll(statisticalStructure.frecuencyEncoder(contentMessage));
 		Map<String, Double> expected = new HashMap<>();
 		expected.putAll(dataSymbolFreqEncoder());
 		assertEquals(expected, actual);
@@ -31,9 +31,8 @@ class StatisticalStructureMessageTest {
 
 	@Test
 	public void testProbability() {
-		StatisticalStructureMessage frequencyAndProbability = new StatisticalStructureMessage();
 		Map<String, Double> actual = new HashMap<>();
-		actual.putAll(frequencyAndProbability.probability(dataSymbolFreqEncoder(), 52));
+		actual.putAll(statisticalStructure.probability(dataSymbolFreqEncoder(), 52));
 		Map<String, Double> expected = new HashMap<>();
 		expected.putAll(dataSymbolProb());
 		assertEquals(expected, actual);
@@ -41,9 +40,8 @@ class StatisticalStructureMessageTest {
 
 	@Test
 	public void testFrequencyBits() {
-		StatisticalStructureMessage frequencyAndProbability = new StatisticalStructureMessage();
 		Map<String, Double> actual = new HashMap<>();
-		actual.putAll(frequencyAndProbability.frequencyBits(dataSymbolProb()));
+		actual.putAll(statisticalStructure.frequencyBits(dataSymbolProb()));
 		Map<String, Double> expected = new HashMap<>();
 		expected.putAll(dataSymbolBitFreq());
 		assertEquals(expected, actual);
@@ -51,14 +49,43 @@ class StatisticalStructureMessageTest {
 
 	@Test
 	public void testExpectedValue() {
-		StatisticalStructureMessage frequencyAndProbability = new StatisticalStructureMessage();
 		Map<String, Double> actual = new HashMap<>();
-		actual.putAll(frequencyAndProbability.expectedValue(dataSymbolProb(), dataSymbolBitFreq()));
+		actual.putAll(statisticalStructure.expectedValue(dataSymbolProb(), dataSymbolBitFreq()));
 		Map<String, Double> expected = new HashMap<>();
 		expected.putAll(dataSymbolExpValue());
 		assertEquals(expected, actual);
 	}
 	
+	@Test
+	public void testBlockCombination() {
+		String actual = "";
+		actual = statisticalStructure.blockCombination(contentBlock (),8);
+		assertEquals(expectedCombination(), actual);
+	}
+	
+	public Map<String, Double> expectedCombination (){
+		Map<String, Double> probBlockData = new HashMap<>();
+		probBlockData.put("S0*S0", 1.0);
+		probBlockData.put("S0*S1", 2.0);
+		probBlockData.put("S0*S2", 3.0);
+		probBlockData.put("S1*S0", 2.0);
+		probBlockData.put("S1*S1", 4.0);
+		probBlockData.put("S1*S2", 6.0);
+		probBlockData.put("S2*S0", 3.0);
+		probBlockData.put("S2*S1", 6.0);
+		probBlockData.put("S2*S2", 9.0);
+		
+		return probBlockData;
+	}
+	
+	public Map<String, Double> contentBlock (){
+		Map<String, Double> probBlockData = new HashMap<>();
+		probBlockData.put("S0", 1.0);
+		probBlockData.put("S1", 2.0);
+		probBlockData.put("S2", 3.0);
+		
+		return probBlockData;
+	}
 	
 	public Map<String, Double> dataSymbolFreqEncoder() {
 		Map<String, Double> data = new HashMap<>();

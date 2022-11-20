@@ -33,7 +33,6 @@ public class MessageBitEncoder {
     @SuppressWarnings("resource")
     public static void main(String[] args) {
         BitConversor bitConversor = new BitConversor();
-        BinaryStructure binaryStructure = new BinaryStructure();
         UtilsMessage utils = new UtilsMessage();
         UniformQuantifierConversor uniformQuantifierConversor = new UniformQuantifierConversor();
         StatisticalStructureMessage statisticalStructureMessage = new StatisticalStructureMessage();
@@ -56,14 +55,13 @@ public class MessageBitEncoder {
         } else {
         	
             System.out.println("Se inserto el contenido exitosamente");
-            
-
-        	statisticalStructureMessage.triggerStatisticalStructure(strContent, "Encoder");
-        	System.out.println("Elija la cantidad de bloques a estructurar:");
+            System.out.println("Elija la cantidad de bloques a estructurar:");
         	Scanner cantBloq = new Scanner(System.in);
-            String cb = cantBloq.nextLine();
-            
-            binaryStructure.principalBinaryStructure(strContent, Integer.valueOf(cb));
+            int cb = cantBloq.nextInt();
+
+        	statisticalStructureMessage.triggerStatisticalStructure(strContent, "Encoder",cb);
+        	        
+            //binaryStructure.principalBinaryStructure(strContent, Integer.valueOf(cb));
             
             System.out.println("Elija la cantidad de bits a codificar:");
             Scanner scBit = new Scanner(System.in);
