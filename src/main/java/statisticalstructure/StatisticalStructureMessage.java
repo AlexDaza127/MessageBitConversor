@@ -283,8 +283,7 @@ public class StatisticalStructureMessage {
 		List<String> orderBlock = new ArrayList<>();
 		System.out.println("probBlock.size() = " + probBlock.size());
 		orderBlock.addAll(probBlock.keySet());
-		Collections.sort(orderBlock);
-
+		Collections.sort(orderBlock); 
 		for (int i = 0; i < orderBlock.size(); i++) {
 
 			for (int j = 0; j < orderBlock.size(); j++) {
@@ -331,8 +330,7 @@ public class StatisticalStructureMessage {
 														if (cantBlock >= 8)
 															for (int p = 0; p < orderBlock.size(); p++) {
 																if(cantBlock == 8) {
-																	multiProbBlock.append(orderBlock.get(i) +" * "+ orderBlock.get(j)+" * "+ orderBlock.get(k)+" * "+ orderBlock.get(l));
-																	multiProbBlock.append(" * "+ orderBlock.get(m)+" * "+ orderBlock.get(n)+" * "+ orderBlock.get(o)+" * "+ orderBlock.get(p) + "\r\n");
+																	multiProbBlock.append(orderBlock.get(i) +" * "+ orderBlock.get(j)+" * "+ orderBlock.get(k)+" * "+ orderBlock.get(l)+" * "+ orderBlock.get(m)+" * "+ orderBlock.get(n)+" * "+ orderBlock.get(o)+" * "+ orderBlock.get(p) + "\r\n");
 																}
 															}
 													}
