@@ -101,9 +101,6 @@ public class StatisticalStructureMessage {
       }
       processData.append(getKeyFromValue);
 
-      processData.append("\r\n\r\n");
-      processData.append(blockCombination(probabilitySymbol, cantBlock));
-
       UtilsMessage utilMessage = new UtilsMessage();
       utilMessage.createFiles(processData.toString(), "MessageStatistical", formattedDate);
       return content;
@@ -277,11 +274,11 @@ public class StatisticalStructureMessage {
    * Estimacion de la estructura binaria del mensaje dependiendo de la cantidad
    * de bloques que se tomen
    *
-   * @param probBlock
-   * @param cantBlock
+   * @param probBlock diccionario de datos con los simbolos y sus probabilidades de aparicion
+   * @param cantBlock cantidad de bloques a combinar
    * @return
    */
-  public String blockCombination(Map<String, Double> probBlock, int cantBlock) {
+  public void blockCombination(Map<String, Double> probBlock, int cantBlock) {
     StringBuilder multiProbBlock = new StringBuilder();
     StringBuilder result = new StringBuilder();
     DecimalFormat df = new DecimalFormat("##0.00000000000");
@@ -412,32 +409,9 @@ public class StatisticalStructureMessage {
           }
         }
       }
-      /*
-      fr = new FileReader(file);
-      br = new BufferedReader(fr);
-      // Lectura del fichero
-      String linea;
-      while ((linea = br.readLine()) != null) {
-        multiProbBlock.append(linea + "\r\n");
-      }
-
-      //System.out.println("multiProbBlock = " + multiProbBlock.toString());
-      String[] splitBlock = multiProbBlock.toString().split("\r\n");
-
-      result.append("Producto de valores de probabilidad por cantidad de bloques\r\n");
-      for (String prodBlockSplit : splitBlock) {
-        double valueProdProb = 1;
-        String[] splitValueBlocks = prodBlockSplit.split("\\*");
-        for (String valueBlocks : splitValueBlocks) {
-          valueProdProb *= probBlock.get(valueBlocks.trim());
-        }
-        result.append(prodBlockSplit + " = " + df.format(valueProdProb) + "\r\n");
-      }
-      file.delete();*/
-      return result.toString();
+    
     } catch (Exception e) {
       e.printStackTrace();
-      return null;
     } finally {
       try {
         //Cierra instancias de FileWriter y BufferedWriter
