@@ -7,10 +7,9 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
-import binarystructure.BinaryStructure;
-
+//import binarystructure.BinaryStructure;
 public class BinaryStructureTest {
-	BinaryStructure binaryStructure = new BinaryStructure();
+  /*BinaryStructure binaryStructure = new BinaryStructure();
 	@Test
 	public void testFrecuencyEncoder() {
 		String content = "qwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiop";
@@ -49,4 +48,5 @@ public class BinaryStructureTest {
 		
 		return probBlockData;
 	}
+   */
 }
