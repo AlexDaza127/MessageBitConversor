@@ -99,6 +99,10 @@ public class StatisticalStructureMessage {
       }
       processData.append(getKeyFromValue);
 
+      if (cantBlock != 100) {
+        blockCombination(probabilitySymbol, cantBlock);
+      }
+
       UtilsMessage utilMessage = new UtilsMessage();
       utilMessage.createFiles(processData.toString(), "MessageStatistical", formattedDate);
       return content;
@@ -272,12 +276,13 @@ public class StatisticalStructureMessage {
    * Estimacion de la estructura binaria del mensaje dependiendo de la cantidad
    * de bloques que se tomen
    *
-   * @param probBlock diccionario de datos con los simbolos y sus probabilidades de aparicion
+   * @param probBlock diccionario de datos con los simbolos y sus probabilidades
+   * de aparicion
    * @param cantBlock cantidad de bloques a combinar
    * @return
    */
   public void blockCombination(Map<String, Double> probBlock, int cantBlock) {
-    DecimalFormat df = new DecimalFormat("##0.0000000000000000");
+    DecimalFormat df = new DecimalFormat("##0.0000000000");
     List<String> orderBlock = new ArrayList<>();
     orderBlock.addAll(probBlock.keySet());
     Collections.sort(orderBlock);
@@ -288,13 +293,13 @@ public class StatisticalStructureMessage {
     try {
 
       File fileDel = new File("./MensajeEstructuraBinaria/MensajesEstructuraBinaria.txt");
-      if(fileDel.delete()){
+      if (fileDel.delete()) {
         System.out.println("Se elimino el archivo: MensajesEstructuraBinaria.txt");
-      }else{
+      } else {
         System.out.println("No se elimino el archivo: MensajesEstructuraBinaria.txt");
       }
       File file = new File("./MensajeEstructuraBinaria/MensajesEstructuraBinaria.txt");
-      
+
       if (!file.exists()) {
         file.createNewFile();
         System.out.println("Se creo el archivo: MensajesEstructuraBinaria.txt");
@@ -302,8 +307,8 @@ public class StatisticalStructureMessage {
 
       fw = new FileWriter(file.getAbsoluteFile(), true);
       bw = new BufferedWriter(fw);
-      
-      bw.write("Combinacion de los simbolos del mensaje en bloques de "+cantBlock+"\r\n\r\n");
+
+      bw.write("Combinacion de los simbolos del mensaje en bloques de " + cantBlock + "\r\n\r\n");
 
       double sumaProbabilidades = 0;
       for (int i = 0; i < orderBlock.size(); i++) {
@@ -409,11 +414,10 @@ public class StatisticalStructureMessage {
           }
         }
       }
-      
+
       bw.write("\r\n\r\n Longitud de palabra = " + probBlock.size());
       bw.write("\r\n Suma de probabilidades = " + sumaProbabilidades);
-      
-    
+
     } catch (Exception e) {
       e.printStackTrace();
     } finally {

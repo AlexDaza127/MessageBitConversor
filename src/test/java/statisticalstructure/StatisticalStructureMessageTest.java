@@ -56,12 +56,6 @@ class StatisticalStructureMessageTest {
 		assertEquals(expected, actual);
 	}
 	
-	@Test
-	public void testBlockCombination() {
-		String actual = "";
-		actual = statisticalStructure.blockCombination(contentBlock (),8);
-		assertEquals(expectedCombination(), actual);
-	}
 	
 	public Map<String, Double> expectedCombination (){
 		Map<String, Double> probBlockData = new HashMap<>();

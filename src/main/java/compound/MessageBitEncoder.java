@@ -58,6 +58,7 @@ public class MessageBitEncoder {
         if (cb >= 2 && cb <= 8) {
           statisticalStructureMessage.triggerStatisticalStructure(strContent, "Encoder", cb);
         } else {
+          statisticalStructureMessage.triggerStatisticalStructure(strContent, "Encoder", 100);
           System.out.println("Se eligio un numero fuera de rango, se omite el paso");
         }
       } catch (Exception e) {
