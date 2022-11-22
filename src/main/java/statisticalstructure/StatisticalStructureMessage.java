@@ -1,9 +1,7 @@
 package statisticalstructure;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -279,18 +277,13 @@ public class StatisticalStructureMessage {
    * @return
    */
   public void blockCombination(Map<String, Double> probBlock, int cantBlock) {
-    StringBuilder multiProbBlock = new StringBuilder();
-    StringBuilder result = new StringBuilder();
-    DecimalFormat df = new DecimalFormat("##0.00000000000");
+    DecimalFormat df = new DecimalFormat("##0.0000000000000000");
     List<String> orderBlock = new ArrayList<>();
-    System.out.println("probBlock.size() = " + probBlock.size());
     orderBlock.addAll(probBlock.keySet());
     Collections.sort(orderBlock);
 
     BufferedWriter bw = null;
     FileWriter fw = null;
-    FileReader fr = null;
-    BufferedReader br = null;
 
     try {
 
@@ -312,12 +305,14 @@ public class StatisticalStructureMessage {
       
       bw.write("Combinacion de los simbolos del mensaje en bloques de "+cantBlock+"\r\n\r\n");
 
+      double sumaProbabilidades = 0;
       for (int i = 0; i < orderBlock.size(); i++) {
         double valueProdProb = 0;
         for (int j = 0; j < orderBlock.size(); j++) {
 
           if (cantBlock == 2) {
             valueProdProb = probBlock.get(orderBlock.get(i).trim()) * probBlock.get(orderBlock.get(j).trim());
+            sumaProbabilidades += valueProdProb;
             bw.write(orderBlock.get(i) + " * " + orderBlock.get(j) + " = " + df.format(valueProdProb) + "\r\n");
           }
 
@@ -328,6 +323,7 @@ public class StatisticalStructureMessage {
                 valueProdProb = probBlock.get(orderBlock.get(i).trim())
                         * probBlock.get(orderBlock.get(j).trim())
                         * probBlock.get(orderBlock.get(k).trim());
+                sumaProbabilidades += valueProdProb;
                 bw.write(orderBlock.get(i) + " * " + orderBlock.get(j) + " * " + orderBlock.get(k) + " = " + df.format(valueProdProb) + "\r\n");
               }
 
@@ -339,6 +335,7 @@ public class StatisticalStructureMessage {
                             * probBlock.get(orderBlock.get(j).trim())
                             * probBlock.get(orderBlock.get(k).trim())
                             * probBlock.get(orderBlock.get(l).trim());
+                    sumaProbabilidades += valueProdProb;
                     bw.write(orderBlock.get(i) + " * " + orderBlock.get(j) + " * " + orderBlock.get(k) + " * " + orderBlock.get(l) + " = " + df.format(valueProdProb) + "\r\n");
                   }
 
@@ -351,6 +348,7 @@ public class StatisticalStructureMessage {
                                 * probBlock.get(orderBlock.get(k).trim())
                                 * probBlock.get(orderBlock.get(l).trim())
                                 * probBlock.get(orderBlock.get(m).trim());
+                        sumaProbabilidades += valueProdProb;
                         bw.write(orderBlock.get(i) + " * " + orderBlock.get(j) + " * " + orderBlock.get(k) + " * " + orderBlock.get(l) + " * " + orderBlock.get(m) + " = " + df.format(valueProdProb) + "\r\n");
                       }
 
@@ -364,6 +362,7 @@ public class StatisticalStructureMessage {
                                     * probBlock.get(orderBlock.get(l).trim())
                                     * probBlock.get(orderBlock.get(m).trim())
                                     * probBlock.get(orderBlock.get(n).trim());
+                            sumaProbabilidades += valueProdProb;
                             bw.write(orderBlock.get(i) + " * " + orderBlock.get(j) + " * " + orderBlock.get(k) + " * " + orderBlock.get(l) + " * " + orderBlock.get(m) + " * " + orderBlock.get(n) + " = " + df.format(valueProdProb) + "\r\n");
                           }
 
@@ -378,6 +377,7 @@ public class StatisticalStructureMessage {
                                         * probBlock.get(orderBlock.get(m).trim())
                                         * probBlock.get(orderBlock.get(n).trim())
                                         * probBlock.get(orderBlock.get(o).trim());
+                                sumaProbabilidades += valueProdProb;
                                 bw.write(orderBlock.get(i) + " * " + orderBlock.get(j) + " * " + orderBlock.get(k) + " * " + orderBlock.get(l) + " * " + orderBlock.get(m) + " * " + orderBlock.get(n) + " * " + orderBlock.get(o) + " = " + df.format(valueProdProb) + "\r\n");
                               }
 
@@ -392,8 +392,8 @@ public class StatisticalStructureMessage {
                                             * probBlock.get(orderBlock.get(n).trim())
                                             * probBlock.get(orderBlock.get(o).trim())
                                             * probBlock.get(orderBlock.get(p).trim());
+                                    sumaProbabilidades += valueProdProb;
                                     bw.write(orderBlock.get(i) + " * " + orderBlock.get(j) + " * " + orderBlock.get(k) + " * " + orderBlock.get(l) + " * " + orderBlock.get(m) + " * " + orderBlock.get(n) + " * " + orderBlock.get(o) + " * " + orderBlock.get(p) + " = " + df.format(valueProdProb) + "\r\n");
-                                    //System.out.println(orderBlock.get(i) +" * "+ orderBlock.get(j)+" * "+ orderBlock.get(k)+" * "+ orderBlock.get(l)+" * "+ orderBlock.get(m)+" * "+ orderBlock.get(n)+" * "+ orderBlock.get(o)+" * "+ orderBlock.get(p) + "\r\n");
                                   }
                                 }
                               }
@@ -409,12 +409,15 @@ public class StatisticalStructureMessage {
           }
         }
       }
+      
+      bw.write("\r\n\r\n Longitud de palabra = " + probBlock.size());
+      bw.write("\r\n Suma de probabilidades = " + sumaProbabilidades);
+      
     
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
       try {
-        //Cierra instancias de FileWriter y BufferedWriter
         if (bw != null) {
           bw.close();
         }
