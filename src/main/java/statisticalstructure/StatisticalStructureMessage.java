@@ -84,13 +84,13 @@ public class StatisticalStructureMessage {
               "\r\n\r\n\r\ncantidad total frecuencia de simbolos contados = " + (int) contTotalSymbol + "\r\n");
       processData.append("cantidad total probabilidad de simbolos contados = "
               + df.format(contTotalProbSymbol).replace(",", ".") + "\r\n");
-      processData.append("cantidad total probabilidad de simbolos contados = "
+      processData.append("Entropia del Sistema = "
               + df.format(contTotalEntropy).replace(",", "."));
 
       Collections.sort(orderProb);
       Collections.reverse(orderProb);
 
-      processData.append("\r\nOrden de mayor a menor frecuencia de apariciÃ³n obtenida: \r\n");
+      processData.append("\r\nOrden de mayor a menor frecuencia de aparición obtenida: \r\n");
 
       String getKeyFromValue = "";
 
